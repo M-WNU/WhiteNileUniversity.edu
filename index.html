@@ -1,1378 +1,473 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hero Speed | Gigabit Internet Speed Test & App</title>
-    
-    <meta name="keywords" content="Hero Speed, speed test, gigabit speed test, اختبار سرعة النت, تطبيق هيرو سبيد">
-    <meta name="description" content="Hero Speed - Gigabit & fiber optic high-speed internet testing platform and professional diagnostic app.">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-dark: #060911;
-            --bg-card: rgba(18, 26, 43, 0.85);
-            --border-glow: rgba(0, 242, 254, 0.3);
-            --border-color: rgba(255, 255, 255, 0.1);
-            
-            --text-main: #ffffff;
-            --text-sub: #94a3b8;
-            
-            --neon-dl: #00f2fe;  
-            --neon-ul: #b537f2;  
-            --neon-ping: #ffb703; 
-            
-            --gauge-track: #151d2a;
-            --radius-lg: 24px;
-            --radius-full: 999px;
-            
-            --font-en: 'Inter', sans-serif;
-            --font-ar: 'Tajawal', sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 85% 85%, rgba(181, 55, 242, 0.1) 0%, transparent 40%);
-            color: var(--text-main);
-            font-family: var(--font-en);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            padding-bottom: 70px; /* مساحة كافية للبانر السفلي الثابت */
-        }
-
-        html[dir="rtl"] body { font-family: var(--font-ar); }
-        html[dir="ltr"] body { font-family: var(--font-en); }
-
-        /* Floating Sticky Language Switcher Button */
-        .lang-toggle-sticky {
-            position: fixed;
-            top: 1.25rem;
-            inset-inline-end: 5%;
-            z-index: 9999;
-            background: rgba(18, 26, 43, 0.85);
-            backdrop-filter: blur(12px);
-            color: var(--text-main);
-            border: 1px solid var(--neon-dl);
-            padding: 0.55rem 1.4rem;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 700;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            transition: all 0.25s ease;
-        }
-
-        .lang-toggle-sticky:hover {
-            background: var(--neon-dl);
-            color: var(--bg-dark);
-            box-shadow: 0 0 18px rgba(0, 242, 254, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.25rem 7%;
-            background: rgba(10, 15, 26, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .brand-icon {
-            width: 38px;
-            height: 38px;
-            color: var(--neon-dl);
-            filter: drop-shadow(0 0 10px var(--neon-dl));
-        }
-
-        .brand-name {
-            font-size: 1.3rem;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 0%, var(--neon-dl) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* تنسيق حاوية الإعلانات داخل الموقع */
-        .ads-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin: 1.5rem 0;
-            overflow: hidden;
-        }
-
-        /* بانر أسفل الشاشة الثابت (320x50) */
-        .bottom-ad-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(10, 15, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 5px 0;
-            z-index: 9998;
-        }
-
-        /* تصميم جذاب ومذهل لقسم تحميل التطبيق */
-        .app-download-banner {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(20, 30, 55, 0.95) 0%, rgba(10, 16, 30, 0.98) 100%);
-            border: 1.5px solid rgba(0, 242, 254, 0.4);
-            border-radius: var(--radius-lg);
-            padding: 1.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(0, 242, 254, 0.05);
-            margin-top: 1rem;
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-            animation: borderGlow 4s infinite alternate;
-        }
-
-        @keyframes borderGlow {
-            0% { border-color: rgba(0, 242, 254, 0.3); box-shadow: 0 15px 40px rgba(0, 242, 254, 0.12); }
-            100% { border-color: rgba(181, 55, 242, 0.5); box-shadow: 0 15px 40px rgba(181, 55, 242, 0.2); }
-        }
-
-        .app-download-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 6px; height: 100%;
-            background: linear-gradient(to bottom, var(--neon-dl), var(--neon-ul));
-            box-shadow: 0 0 15px var(--neon-dl);
-        }
-
-        .banner-info {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-        }
-
-        .banner-icon-box {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(181, 55, 242, 0.15));
-            border: 1px solid rgba(0, 242, 254, 0.4);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .banner-text h3 {
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 0.3rem;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
-        }
-
-        .banner-text p {
-            font-size: 0.9rem;
-            color: var(--text-sub);
-        }
-
-        .banner-btn {
-            background: linear-gradient(135deg, var(--neon-dl) 0%, #0099ff 100%);
-            color: var(--bg-dark);
-            padding: 0.9rem 2.2rem;
-            border-radius: var(--radius-full);
-            font-weight: 900;
-            font-size: 1rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .banner-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(60deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg) translateX(-100%);
-            transition: transform 0.7s ease;
-        }
-
-        .banner-btn:hover::after {
-            transform: rotate(45deg) translateX(100%);
-        }
-
-        .banner-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 35px rgba(0, 242, 254, 0.8), 0 0 15px rgba(181, 55, 242, 0.5);
-            background: linear-gradient(135deg, #ffffff 0%, var(--neon-dl) 100%);
-        }
-
-        @media (max-width: 768px) {
-            .app-download-banner {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-                padding: 1.5rem 1rem;
-            }
-            .banner-info {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-            .banner-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        .app-container {
-            flex: 1;
-            max-width: 1050px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.1rem;
-            padding: 1rem 0 0.5rem 0;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            padding: 0.4rem 1.1rem;
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--neon-dl);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--neon-dl);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--neon-dl);
-            animation: pulse 1.8s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7); }
-            70% { transform: scale(1.3); box-shadow: 0 0 0 8px rgba(0, 242, 254, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
-        }
-
-        .hero-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            line-height: 1.25;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            max-width: 780px;
-        }
-
-        .brand-highlight {
-            background: linear-gradient(135deg, var(--neon-dl) 0%, #ffffff 50%, var(--neon-ul) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
-            display: inline-block;
-        }
-
-        .hero-subtitle {
-            font-size: 1.05rem;
-            color: var(--text-sub);
-            max-width: 650px;
-            line-height: 1.6;
-        }
-
-        .hero-features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-top: 0.4rem;
-        }
-
-        .feature-tag {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            padding: 0.45rem 1rem;
-            border-radius: var(--radius-lg);
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #cbd5e1;
-            backdrop-filter: blur(8px);
-            transition: all 0.25s ease;
-        }
-
-        .feature-tag:hover {
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-            color: #ffffff;
-        }
-
-        .total-progress-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.05);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .total-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--neon-dl), var(--neon-ul), var(--neon-ping));
-            transition: width 0.2s linear;
-            box-shadow: 0 0 10px var(--neon-dl);
-        }
-
-        .status-badge {
-            text-align: center;
-            font-size: 0.95rem;
-            color: var(--neon-dl);
-            font-weight: 700;
-            min-height: 1.3rem;
-            margin-top: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        /* Results Display Cards */
-        .results-panel {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-        }
-
-        @media (max-width: 700px) {
-            .results-panel { grid-template-columns: 1fr; }
-            .hero-title { font-size: 1.7rem; }
-            .hero-subtitle { font-size: 0.92rem; }
-        }
-
-        .metric-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            transition: transform 0.3s, border-color 0.3s;
-        }
-
-        .metric-card:hover { transform: translateY(-4px); }
-        .metric-card.download::before { background: var(--neon-dl); }
-        .metric-card.upload::before { background: var(--neon-ul); }
-        .metric-card.ping::before { background: var(--neon-ping); }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 20%; right: 20%;
-            height: 3px;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 0 12px currentColor;
-        }
-
-        .metric-label {
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        .metric-value-container {
-            display: flex;
-            align-items: baseline;
-            gap: 0.35rem;
-        }
-
-        .metric-value {
-            font-size: 2.4rem;
-            font-weight: 900;
-        }
-
-        .metric-unit {
-            color: var(--text-sub);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Main Gauge and IP Section Layout */
-        .main-display {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            padding: 2.5rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        @media (max-width: 850px) {
-            .main-display { grid-template-columns: 1fr; }
-        }
-
-        .gauge-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .gauge-container {
-            position: relative;
-            width: 290px;
-            height: 290px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .gauge-svg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .gauge-track, .gauge-fill {
-            fill: none;
-            stroke-width: 12;
-            stroke-linecap: round;
-        }
-
-        .gauge-track { stroke: var(--gauge-track); }
-        
-        .gauge-fill {
-            stroke: var(--neon-dl);
-            stroke-dasharray: 440;
-            stroke-dashoffset: 440;
-            filter: drop-shadow(0 0 10px currentColor);
-            transition: stroke 0.4s;
-        }
-
-        .needle {
-            position: absolute;
-            width: 4px;
-            height: 105px;
-            background: linear-gradient(to top, transparent 20%, #ffffff 100%);
-            bottom: 50%;
-            transform-origin: bottom center;
-            transform: rotate(-120deg);
-            border-radius: 4px;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-            z-index: 5;
-        }
-
-        .needle-cap {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            background: #ffffff;
-            border-radius: 50%;
-            z-index: 6;
-            box-shadow: 0 0 15px currentColor;
-            transition: color 0.4s;
-        }
-
-        .gauge-center {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 185px;
-            height: 185px;
-            background: #0b111e;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            box-shadow: inset 0 0 25px rgba(0,0,0,0.8);
-        }
-
-        .action-btn {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            color: var(--text-main);
-            font-size: 2.3rem;
-            font-weight: 900;
-            font-family: inherit;
-            cursor: pointer;
-            transition: transform 0.2s, color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.06);
-            color: var(--neon-dl);
-            text-shadow: 0 0 20px var(--neon-dl);
-        }
-
-        .live-metrics { text-align: center; }
-
-        .live-type {
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 0.2rem;
-            transition: color 0.3s;
-        }
-
-        .live-val {
-            font-size: 2.8rem;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        .live-unit {
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            margin-top: 0.3rem;
-        }
-
-        .network-info-card {
-            width: 100%;
-            background: rgba(11, 17, 30, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 1rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            font-size: 0.88rem;
-            color: var(--text-sub);
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            padding-bottom: 0.4rem;
-        }
-        .info-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-        .info-row span.val {
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        .chart-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 100%;
-        }
-
-        .chart-title {
-            font-size: 0.9rem;
-            color: var(--text-sub);
-            font-weight: 700;
-        }
-
-        canvas {
-            width: 100%;
-            height: 200px;
-            background: rgba(11, 17, 30, 0.6);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-        }
-
-        .actions-bar {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .history-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            text-align: initial;
-        }
-
-        .history-table th, .history-table td {
-            padding: 0.85rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .history-table th { color: var(--text-sub); font-weight: 700; }
-
-        .hidden { display: none !important; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>امتحان الثقافة الإسلامية 2 — شامل</title>
+<style>
+:root{box-sizing:border-box;--bg:#121a17;--card:#1b2622;--tx:#e8efeb;--mu:#93a39b;--ac:#3fbf96;--ok:#4cc27d;--no:#ef6b5b;--bd:#2d3b35;--warn:#f39c12}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma, Arial, sans-serif;line-height:1.8}
+.w{max-width:720px;margin:0 auto;padding:16px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+h1{font-size:1.5rem;margin:.2em 0;font-weight:bold;text-align:center;color:var(--ac)}
+.header-box{text-align:center;border-bottom:2px dashed var(--bd);padding-bottom:12px;margin-bottom:14px}
+.mu{color:var(--mu);font-size:.92rem}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:12px 18px;transition:all .2s}
+button:active{transform:scale(0.98)}
+.p{background:var(--ac);color:#121a17;border-color:var(--ac);font-weight:bold}
+.o{display:block;width:100%;text-align:right;margin:10px 0;padding:14px 16px;border-radius:12px;font-size:1rem;border:1px solid var(--bd);background:var(--card);cursor:pointer}
+.o.s{border-color:var(--ac);outline:2px solid var(--ac);background:color-mix(in srgb, var(--ac) 15%, var(--card))}
+.o.ok{border-color:var(--ok);background:#1a3a2a}
+.o.no{border-color:var(--no);background:#3a1a1a}
+
+.match-container{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.match-row{display:flex;justify-content:space-between;align-items:center;background:#23332c;padding:12px;border-radius:10px;border:1px solid var(--bd);gap:10px}
+.match-item{flex:1;font-weight:bold;font-size:0.95rem}
+.match-select{flex:1;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px;font-family:inherit;font-size:0.9rem;cursor:pointer}
+
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:bold}
+.bar{height:8px;background:var(--bd);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--ac)}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:16px}
+.dots{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.dots b{width:34px;height:34px;border-radius:10px;border:1px solid var(--bd);display:grid;place-items:center;font-size:.85rem;cursor:pointer;font-weight:bold;position:relative;background:var(--card);color:var(--tx)}
+.dots b.answered{background:var(--ok);color:#121a17;border-color:var(--ok)}
+.dots b.partial{background:var(--no);color:#fff;border-color:var(--no)}
+.dots b.cur{outline:3px solid var(--tx)}
+.dots b.flagged::after{content:'★';position:absolute;top:-4px;right:-4px;color:var(--warn);font-size:10px}
+.ex{background:#23332c;border-radius:12px;padding:12px 16px;margin-top:10px;font-size:.95rem}
+.big{font-size:3rem;font-weight:bold;color:var(--ac);text-align:center}
+.t{font-weight:bold}
+.flag-btn{background:transparent;border:1px solid var(--warn);color:var(--warn);padding:6px 12px;font-size:0.85rem;border-radius:8px;margin-bottom:10px;display:inline-flex;align-items:center;gap:5px}
+.flag-btn.active{background:var(--warn);color:#121a17}
+.stats-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0;text-align:center}
+.stat-item{background:#23332c;padding:10px;border-radius:10px;border:1px solid var(--bd)}
+.stat-num{font-size:1.2rem;font-weight:bold;color:var(--ac)}
+.developer-credit{margin-top:15px;font-size:0.88rem;color:var(--mu);text-align:center;border-top:1px solid var(--bd);padding-top:10px}
+</style>
 </head>
 <body>
+<div class="w" id="app"></div>
+<script>
+const MASTER_BANK=[
+// قوائم التوصيل (مجموعة واسعة من قوائم التوصيل الصعبة)
+{
+    type: "match",
+    t: "صل كل نوع من أنواع الشركات بما يناسبه تماماً من القائمة المقابلة:",
+    pairs: [
+        { item: "شركة الأبدان", target: "اشتراك اثنان فأكثر فيما يكتسبانه بأبدانهم كالصناعة والخياطة" },
+        { item: "شركة الوجوه", target: "اشتراك في شراء سلع بالجاه والسمعة بدون رأس مال نقدي" },
+        { item: "شركة المفاوضة", target: "أوسع الشركات وتشمل العنان والوجوه والأبدان والمضاربة" },
+        { item: "شركة العنان", target: "اجتماع شريكين أو أكثر بمال معلوم لتنميته معاً" }
+    ],
+    allTargets: [
+        "اختر الإجابة المناسبة...",
+        "اشتراك اثنان فأكثر فيما يكتسبانه بأبدانهم كالصناعة والخياطة",
+        "اشتراك في شراء سلع بالجاه والسمعة بدون رأس مال نقدي",
+        "أوسع الشركات وتشمل العنان والوجوه والأبدان والمضاربة",
+        "اجتماع شريكين أو أكثر بمال معلوم لتنميته معاً",
+        "بيع موصوف في الذمة إلى أجل معلوم ببدل مقبوض",
+        "ما يُعطاه الإنسان على أمر يفعله كأجر للمكافأة"
+    ],
+    e: "مراجعة دقيقة ومقارنة بين أنواع الشركات في الفقه الإسلامي."
+},
+{
+    type: "match",
+    t: "صل كل مصطلح أو حكم شرعي بما يناسبه تماماً من القائمة المقابلة:",
+    pairs: [
+        { item: "الصلوات الخمس", target: "ميزان اليوم والليلة" },
+        { item: "صلاة الجمعة", target: "ميزان الأسبوع" },
+        { item: "شهر رمضان المبارك", target: "ميزان العام" },
+        { item: "السفيه في الحجر", target: "المبذر لماله في الشهوات وتصرفه غير جائز" }
+    ],
+    allTargets: [
+        "اختر الإجابة المناسبة...",
+        "ميزان اليوم والليلة",
+        "ميزان الأسبوع",
+        "ميزان العام",
+        "المبذر لماله في الشهوات وتصرفه غير جائز",
+        "أخذ الشريك حصة شريكه المباعة بثمنها",
+        "عقد لازم على منفعة معينة مدة معلومة"
+    ],
+    e: "موازين الوقت ومصطلحات الحجر والشفعة في المقرر."
+},
+{
+    type: "match",
+    t: "صل عقود المعاملات المالية التالية بما يناسبها في القائمة المقابلة:",
+    pairs: [
+        { item: "عقد السلم", target: "بيع موصوف في الذمة إلى أجل معلوم ببدل مقبوض" },
+        { item: "عقد المرابحة", target: "البيع بثمن السلعة الأول مع زيادة ربح معلوم متفق عليه" },
+        { item: "عقد الرهن", target: "توثيق دين بعين يمكن استيفاؤه منها أو من ثمنها" },
+        { item: "عقد الإجارة", target: "عقد لازم على منفعة معينة مدة معلومة بثمن معلوم" }
+    ],
+    allTargets: [
+        "اختر الإجابة المناسبة...",
+        "بيع موصوف في الذمة إلى أجل معلوم ببدل مقبوض",
+        "البيع بثمن السلعة الأول مع زيادة ربح معلوم متفق عليه",
+        "توثيق دين بعين يمكن استيفاؤه منها أو من ثمنها",
+        "عقد لازم على منفعة معينة مدة معلومة بثمن معلوم",
+        "ما يعطى على أمر يفعله الإنسان",
+        "الاشتراك بمال وجهد برأس مال محدد"
+    ],
+    e: "مقارنة شاملة بين عقود المعاملات المالية (السلم، المرابحة، الرهن، والإجارة)."
+},
 
-    <!-- Sticky Language Switcher Button -->
-    <button id="lang-toggle" class="lang-toggle-sticky">عربي</button>
+// أسئلة الاختيار من متعدد والصح والخطأ لتغطية أكثر من 80 سؤالاً اختيارياً لتوليد 60 عشوائية بكل مرة
+{type: "circle", t: "المال في الإسلام يُعتبر:", o: [{x:"قوام المعيشة وخيراً ونعمة", r:true}, {x:"شراً يجب التخلص منه", r:false}, {x:"مملوكاً للدولة فقط", r:false}, {x:"محظور التملك", r:false}], e: "المال قوام المعيشة وسماه الله خيراً ونعمة."},
+{type: "circle", t: "الإنسان تجاه المال يُعتبر:", o: [{x:"مستخلف وأمين عليه", r:true}, {x:"مالكاً حقيقياً مطلقاً", r:false}, {x:"مسؤولاً عن إهلاكه", r:false}, {x:"غير مطالب بتنميته", r:false}], e: "الإنسان أمين على المال ومستخلف فيه."},
+{type: "circle", t: "من الضروريات العامة التي يمنع الأفراد من تملكها واحتكارها:", o: [{x:"الكهرباء والماء والصحة والتعليم", r:true}, {x:"الملابس والأحذية", r:false}, {x:"السيارات الخاصة", r:false}, {x:"الأراضي الزراعية الخاصة", r:false}], e: "الكهرباء والماء والصحة والتعليم ملك للجميع."},
+{type: "circle", t: "الاعتدال في الإنفاق وترشيد الاستهلاك يتمثل في:", o: [{x:"التوسط بين الإسراف والتقتير", r:true}, {x:"البخل التام", r:false}, {x:"الإسراف المطلق", r:false}, {x:"عدم الإنفاق نهائياً", r:false}], e: "الاعتدال هو التوسط بين الإسراف والتقتير."},
+{type: "circle", t: "من وسائل تحقيق التكافل الاجتماعي في الإسلام:", o: [{x:"الزكاة ونفقات الأقارب والصدقات", r:true}, {x:"الربا والاحكار", r:false}, {x:"السرقة المنظمة", r:false}, {x:"كنز الأموال", r:false}], e: "الزكاة والصدقات ونفقات الأقارب من وسائل التكافل."},
 
-    <header class="top-bar">
-        <div class="brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <h1 class="brand-name">Hero Speed</h1>
-        </div>
-    </header>
+{type: "circle", t: "من أركان البيع الخمسة:", o: [{x:"البائع، المشتري، المبيع، الصيغة، التراضي", r:true}, {x:"الشهود فقط", r:false}, {x:"الدين والرهن", r:false}, {x:"الربح والتعويض", r:false}], e: "أركان البيع خمسة: البائع، المشتري، المبيع، الصيغة، التراضي."},
+{type: "circle", t: "بيع النجش هو:", o: [{x:"إعطاء ثمن عال في السلعة وهو لا يريد شراءها لخداع غيره", r:true}, {x:"بيع شيء مجهول", r:false}, {x:"بيع خنزير", r:false}, {x:"بيع كاش", r:false}], e: "النجش إعطاء ثمن عال لخداع الآخرين."},
+{type: "circle", t: "بيع الغرر هو:", o: [{x:"بيع شيء لا يُعرف وصفه ولا كميته (كسمك في الماء)", r:true}, {x:"بيع المرابحة", r:false}, {x:"بيع السلم الصحيح", r:false}, {x:"بيع الحاضر للبادي", r:false}], e: "بيع الغرر بيع شيء مجهول الوصف والكمية."},
+{type: "circle", t: "إذا بيع نخل قد أُبّرت (لُقّحت)، فالثمرة تكون لـ:", o: [{x:"البائع إلا إذا اشترطها المشتري", r:true}, {x:"المشتري مطلقاً", r:false}, {x:"للفقراء", r:false}, {x:"تناصفاً", r:false}], e: "فثمرتها للبائع ما لم يشترطها المشتري."},
+{type: "circle", t: "بيع المصراة هو:", o: [{x:"شاة يُحبس لبنها في ضرعها لتبدو سمينة", r:true}, {x:"بيع السلعة لأجل", r:false}, {x:"بيع الدين بالدين", r:false}, {x:"بيع الثمار قبل بدو صلاحها", r:false}], e: "بيع المصراة هو حبس لبن الشاة لتبدو سمينة."},
+{type: "circle", t: "بيع العينة المحرم هو:", o: [{x:"أن يبيع سلعة لأجل ثم يشتريها نقداً بأقل", r:true}, {x:"بيع الحضر للبادي", r:false}, {x:"بيع السمك في الماء", r:false}, {x:"بيع المجهول", r:false}], e: "بيع العينة هو حيلة ربوية بالشراء بأقل نقداً."},
 
-    <main class="app-container">
+{type: "circle", t: "ربا الفضل هو:", o: [{x:"بيع الجنس الواحد بجنسه متفاضلاً (مثل قنطار بقمح أكثر)", r:true}, {x:"دين مؤجل بزيادة", r:false}, {x:"قرض حسنة", r:false}, {x:"بيع عاجل", r:false}], e: "ربا الفضل بيع الجنس الواحد بجنسه متفاضلاً."},
+{type: "circle", t: "ربا النسيئة (الجاهلية) هو:", o: [{x:"الزيادة في الدين مقابل التأجيل والتسويف عند حلول الأجل", r:true}, {x:"بيع الذهب بالذهب يداً بيد", r:false}, {x:"بيع التمر بالتمر مساواة", r:false}, {x:"الهبة", r:false}], e: "ربا النسيئة هو طلب الزيادة مقابل التأجيل."},
+{type: "circle", t: "أصول الأموال الربوية (الستة الأصناف) تتكون من الذهب والفضة وـ:", o: [{x:"القمح، الشعير، التمر، الملح", r:true}, {x:"الخضروات والفواكه", r:false}, {x:"اللحوم والألبان", r:false}, {x:"الملابس والأثاث", r:false}], e: "الأصناف الستة هي: الذهب، الفضة، القمح، الشعير، التمر، الملح."},
+{type: "circle", t: "حكم الربا في الشريعة الإسلامية:", o: [{x:"محرم بالكتاب والسنة تحريماً قاطعاً", r:true}, {x:"مكروه تنزيهاً", r:false}, {x:"مباح للضرورة", r:false}, {x:"جائز بشرط الرضا", r:false}], e: "الربا محرم بالكتاب والسنة."},
 
-        <section class="hero-section">
-            <div class="hero-badge">
-                <span class="pulse-dot"></span>
-                <span data-i18n="heroBadge">Gigabit & Fiber Speed Benchmark</span>
-            </div>
-            <h2 class="hero-title">
-                <span data-i18n="heroTitleStart">Test Your Internet Speed with</span> 
-                <span class="brand-highlight">Hero Speed</span>
-            </h2>
-            <p class="hero-subtitle" data-i18n="heroSub">
-                Accurate, real-time measurements for Download, Upload, Ping, and Latency over Fiber & 5G Edge Networks.
-            </p>
+{type: "circle", t: "تعريف الرهن شرعاً هو:", o: [{x:"توثيق دين بعين يمكن استيفاؤه منها أو من ثمنها", r:true}, {x:"بيع مؤجل", r:false}, {x:"تبرع مطلق", r:false}, {x:"عقد أجرة", r:false}], e: "الرهن هو توثيق دين بعين يمكن استيفاؤه منها."},
+{type: "circle", t: "الرهن عند المرتهن يُعتبر:", o: [{x:"أمانة، لا يضمنه إلا إن تلف بتفريط أو تعدٍ", r:true}, {x:"ضمان مطلق في كل حال", r:false}, {x:"ملكاً له يتصرف فيه", r:false}, {x:"هبة خالصة", r:false}], e: "الرهن أمانة يضمنه المرتهن فقط إذا فرّط."},
+{type: "circle", t: "الجعالة هي:", o: [{x:"ما يُعطاه الإنسان على أمر يفعله (مكافأة على عمل)", r:true}, {x:"عقد إجارة لازم", r:false}, {x:"شركة أموال", r:false}, {x:"وصية", r:false}], e: "الجعالة مكافأة على عمل محدد."},
+{type: "circle", t: "من أحكام الجعالة أن العقد:", o: [{x:"جائز من الطرفين يجوز فسخه في أي وقت", r:true}, {x:"لازم لا يفسخ", r:false}, {x:"باطل دائماً", r:false}, {x:"يشترط فيه تحديد المدة بدقة", r:false}], e: "الجعالة عقد جائز يجوز فسخه."},
+{type: "circle", t: "إذا قام جماعة بعمل الجعالة:", o: [{x:"اقتسموا الجعل بالسوية", r:true}, {x:"يأخذه الأول فقط", r:false}, {x:"يأخذه أكبرهم سناً", r:false}, {x:"يبطل الجعل", r:false}], e: "إذا قام جماعة بالعمل اقتسموا الجعل بالسوية."},
 
-            <!-- قسم تحميل التطبيق -->
-            <div class="app-download-banner">
-                <div class="banner-info">
-                    <div class="banner-icon-box">⚡</div>
-                    <div class="banner-text">
-                        <h3 data-i18n="appBannerTitle">Hero Speed Android App</h3>
-                        <p data-i18n="appBannerDesc">Download our official network testing app for free right now</p>
-                    </div>
-                </div>
-                <a href="https://www.mediafire.com/file/ofylzyv8m138qv6/app-release.apk/file" target="_blank" class="banner-btn">
-                    📥 <span data-i18n="appBannerBtn">Download App (APK)</span>
-                </a>
-            </div>
+{type: "circle", t: "الحد الأقصى للوصية لمن له ورثة هو:", o: [{x:"الثلث فما دونه", r:true}, {x:"النصف", r:false}, {x:"الكل", r:false}, {x:"الربع", r:false}], e: "لا يوصي لمن له ورثة بأكثر من الثلث."},
+{type: "circle", t: "حكم الوصية لوارث:", o: [{x:"لا وصية لوارث إلا أن يشاء الورثة ويجيزوها", r:true}, {x:"تجوز مطلقاً", r:false}, {x:"تبطل نهائياً ولا تنفذ حتى برضاهم", r:false}, {x:"تجب", r:false}], e: "لا وصية لوارث إلا أن يشاء الورثة."},
+{type: "circle", t: "مصطلح «أولاد فلان» في الوصية يعني:", o: [{x:"تتوزع بين الذكور والإناث", r:true}, {x:"للذكور فقط", r:false}, {x:"للإناث فقط", r:false}, {x:"للكبار فقط", r:false}], e: "أولاد تعم الذكور والإناث."},
+{type: "circle", t: "مصطلح «بنو فلان» في الوصية يعني:", o: [{x:"للذكور فقط", r:true}, {x:"للإناث فقط", r:false}, {x:"للذكور والإناث", r:false}, {x:"للكبار فقط", r:false}], e: "بنو تكون للذكور فقط."},
+{type: "circle", t: "مصطلح «بنات فلان» في الوصية يعني:", o: [{x:"للإناث فقط", r:true}, {x:"للذكور فقط", r:false}, {x:"للجميع", r:false}, {x:"للصغار فقط", r:false}], e: "بنات تكون للإناث فقط."},
 
-            <div class="hero-features">
-                <div class="feature-tag">⚡ <span data-i18n="feat1">Real-Time Gigabit Analytics</span></div>
-                <div class="feature-tag">🌐 <span data-i18n="feat2">Global Fiber & 5G Edge Servers</span></div>
-                <div class="feature-tag">🎯 <span data-i18n="feat3">Ultra Low-Latency Precision</span></div>
-            </div>
-        </section>
+{type: "circle", t: "السفيه في باب الحجر هو:", o: [{x:"المبذر لماله في الشهوات وتصرفه غير جائز", r:true}, {x:"الصغير الذي لم يبلغ", r:false}, {x:"المجنون", r:false}, {x:"المريض مرض موت", r:false}], e: "السفيه هو المبذر لماله في الشهوات."},
+{type: "circle", t: "الشفعة هي:", o: [{x:"أخذ الشريك حصة شريكه التي باعها بثمنها", r:true}, {x:"شراء سلعة من السوق", r:false}, {x:"هبة الجار لجاره", r:false}, {x:"قسمة الميراث", r:false}], e: "الشفعة أخذ الشريك حصة شريكه المباعة بثمنها."},
+{type: "circle", t: "حق الشفعة:", o: [{x:"لا يُباع ولا يُوهب", r:true}, {x:"يُباع ويُوهب بحرية", r:false}, {x:"يُورث فقط", r:false}, {x:"يجوز بيعه للشريك", r:false}], e: "حق الشفعة لا يُباع ولا يُوهب."},
+{type: "circle", t: "من يحجر عليهم في الأموال:", o: [{x:"الصغير، المجنون، السفيه، والمريض مرض الهلاك", r:true}, {x:"التاجر الرشيد فقط", r:false}, {x:"البطالون", r:false}, {x:"الفقراء", r:false}], e: "المحجور عليهم هم الصغير، المجنون، السفيه، والمريض."},
 
-        <!-- 🌟 [إعلان 1] كود الإعلان المربع 300×250 داخل المحتوى -->
-        <div class="ads-container">
-            <script>
-              atOptions = {
-                'key' : '867d3213b800c0831984b7f15ac410ea',
-                'format' : 'iframe',
-                'height' : 250,
-                'width' : 300,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highrevenueformat.com/867d3213b800c0831984b7f15ac410ea/invoke.js"></script>
-        </div>
+{type: "circle", t: "شركة العنان هي:", o: [{x:"شريكان أو أكثر يجمعان مالاً معلوماً لتنميته معاً", r:true}, {x:"شركة أبدان فقط", r:false}, {x:"شركة وجوه", r:false}, {x:"شركة مضاربة", r:false}], e: "شركة العنان اجتماع شريكين أو أكثر بمال معلوم."},
+{type: "circle", t: "من شروط شركة العنان أن يكون رأس المال:", o: [{x:"نقوداً ومعلوماً ومقسم لأسهم", r:true}, {x:"عروضاً غير مقومة", r:false}, {x:"مجهول القدر", r:false}, {x:"ديوناً في الذمة", r:false}], e: "رأس مال شركة العنان يشترط أن يكون نقوداً ومعلوماً."},
 
-        <!-- عداد القياس وزر ابدأ في المقدمة -->
-        <section class="main-display">
-            <div class="gauge-column">
-                <div class="gauge-container">
-                    <svg class="gauge-svg" viewBox="0 0 200 200">
-                        <path class="gauge-track" d="M 30 150 A 80 80 0 1 1 170 150" />
-                        <path id="gauge-fill" class="gauge-fill" d="M 30 150 A 80 80 0 1 1 170 150" />
-                    </svg>
-                    
-                    <div id="needle" class="needle"></div>
-                    <div id="needle-cap" class="needle-cap"></div>
+{type: "circle", t: "شركة الأبدان تقوم على:", o: [{x:"اشتراك اثنان فأكثر فيما يكتسبانه بأبدانهم (صناعة، خياطة)", r:true}, {x:"رأس مال نقدي ضخم", r:false}, {x:"الجهد والسمعة فقط", r:false}, {x:"المضاربة المطلقة", r:false}], e: "شركة الأبدان اشتراك في الكسب بالأبدان."},
+{type: "circle", t: "في شركة الوجوه، الخسارة تكون:", o: [{x:"على الشريكين بالسوية", r:true}, {x:"بحسب النصيب المالي", r:false}, {x:"على صاحب الجاه وحده", r:false}, {x:"لا خسارة فيها", r:false}], e: "في شركة الوجوه الربح على ما اتفقا والخسارة بالسوية."},
+{type: "circle", t: "الإجارة هي عقد:", o: [{x:"لازم على منفعة معينة مدة معلومة بثمن معلوم", r:true}, {x:"جائز غير لازم", r:false}, {x:"مجهول المدة", r:false}, {x:"تبرع وإحسان", r:false}], e: "الإجارة عقد لازم على منفعة معينة."},
+{type: "circle", t: "من شروط صحة الإجارة الأساسية:", o: [{x:"معرفة المنفعة وإباحتها ومعرفة الأجرة", r:true}, {x:"وجود شاهدين", r:false}, {x:"قبض الأجرة عيناً", r:false}, {x:"أن تكون بلا مدة", r:false}], e: "شروط صحة الإجارة: معرفة المنفعة، إباحتها، ومعرفة الأجرة."},
+{type: "circle", t: "الأجير المشترك (كالخياط والحداد):", o: [{x:"يضمن ما أتلفه بفعله، ولا يضمن ما ضاع بلا تفريط", r:true}, {x:"لا يضمن شيئاً مطلقاً", r:false}, {x:"يضمن كل شيء حتى لو لم يتفرط", r:false}, {x:"حكمه حكم المتطوع", r:false}], e: "الأجير المشترك يضمن ما أتلفه بفعله."},
 
-                    <div class="gauge-center">
-                        <button id="action-btn" class="action-btn">
-                            <span class="btn-text" data-i18n="go">GO</span>
-                        </button>
-                        <div id="live-metrics" class="live-metrics hidden">
-                            <div id="live-type" class="live-type">--</div>
-                            <div id="live-val" class="live-val">0.0</div>
-                            <div class="live-unit">Mbps</div>
-                        </div>
-                    </div>
-                </div>
+{type: "circle", t: "المشاركة تعني:", o: [{x:"الاشتراك بمال وجهد برأس مال محدد بين شريكين أو أكثر", r:true}, {x:"إعطاء مال لشخص ليتاجر به فقط", r:false}, {x:"بيع عاجل بأجل", r:false}, {x:"إقراض بدون ربح", r:false}], e: "المشاركة هي المخالطة والاشتراك كل بنصيب محدد."},
+{type: "circle", t: "الجوهر في عقد المرابحة هو:", o: [{x:"بيع عاجل بأجل (السلعة عاجلة وثمنها آجل بزيادة معلومة)", r:true}, {x:"بيع دين بدين", r:false}, {x:"شراكة أبدان", r:false}, {x:"مضاربة مطلقة", r:false}], e: "المرابحة بيع عاجل بأجل بزيادة معلومة ربح متفق عليه."},
+{type: "circle", t: "في عقد المضاربة، الخسارة المالية تتحمل من قِبل:", o: [{x:"رب المال وحده (وتكفي العامل خسارة جهده)", r:true}, {x:"العامل وحده", r:false}, {x:"الشريكين بالتساوي", r:false}, {x:"لا خسارة فيها", r:false}], e: "في المضاربة رب المال يخسر المال."},
+{type: "circle", t: "الزمن الذي يحتاجه الفرد أو الجماعة لقضاء عمل معين يسمى:", o: [{x:"الوقت", r:true}, {x:"المال", r:false}, {x:"السلعة", r:false}, {x:"الأجل", r:false}], e: "الوقت هو الزمن الذي يحتاجه الفرد أو الجماعة."},
 
-                <div class="network-info-card">
-                    <div class="info-row">
-                        <span data-i18n="ip">Your Public IP:</span>
-                        <span id="info-ip" class="val" data-i18n="pressStart">Click GO</span>
-                    </div>
-                    <div class="info-row">
-                        <span data-i18n="isp">Provider (ISP):</span>
-                        <span id="info-isp" class="val" data-i18n="pressStart">Click GO</span>
-                    </div>
-                    <div class="info-row">
-                        <span data-i18n="location">Server Location:</span>
-                        <span id="info-loc" class="val" data-i18n="pressStart">Click GO</span>
-                    </div>
-                </div>
-            </div>
+// أسئلة الصح والخطأ الإضافية
+{type: "circle", t: "يجوز للموصي الرجوع في وصيته أو تغييرها ما دام حياً", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "من أحكام الوصية جواز الرجوع فيها ما دام حياً."},
+{type: "circle", t: "إن رفض الموصى له الوصية بعد موت الموصي فليس له حق القبول بعد ذلك", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "إن رفض الوصية بطلت ولا حق له بعد رفضها."},
+{type: "circle", t: "عقد الجعالة عقد لازم من الطرفين لا يجوز فسخه إلا برضا الطرفين", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "الجعالة عقد جائز غير لازم يجوز لكل طرف فسخه."},
+{type: "circle", t: "الرهن يلزم بالقبض في حق الراهن وحده فلا يسترده دون سداد الدين", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "يلزم الرهن بالقبض في حق الراهن لا المرتهن."},
+{type: "circle", t: "تثبت الشفعة في الأعيان المنقولة كالسيارات والثياب والحيوانات", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "تسقط الشفعة وتنتفي في المنقول كالقيام والثياب والحيوان."},
+{type: "circle", t: "الإجارة عقد لازم لا يفسخ إلا بمسوغ شرعي", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الإجارة عقد لازم على منفعة معلومة."},
+{type: "circle", t: "يجوز بيع السلعة قبل قبضها في عقود البيع العادية", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "نهى النبي عن بيع السلعة حتى تقبض."},
+{type: "circle", t: "الوقت هو الحياة نفسها ومن ضيع وقته ضاعت حياته", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الوقت يمتد من الميلاد إلى الوفاة وهو الحياة."},
+{type: "circle", t: "يجوز أن يكون رأس مال شركة العنان عروضاً غير مقومة مجهولة القيمة", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "شرط رأس مال العنان أن يكون نقوداً ومعلوماً."},
+{type: "circle", t: "في شركة الوجوه يعتمد الشريكان على جاههما وسمعتهما بلا رأس مال نقدي", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "شركة الوجوه تقوم على الشراء بالجاه والسمعة."},
+{type: "circle", t: "لا يجوز للمضارب أن يضارب بمال رجل آخر إذا أضر بمال الأول إلا بإذنه", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "من أحكام المضاربة ألا يضر بمال الأول إلا بإذن."},
+{type: "circle", t: "أقسم الله سبحانه وتعالى بالوقت بأزمنة متعددة كالفجر والعصر والليل والنهار", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "أقسم الله بالفجر والليل والضحى والعصر."},
+{type: "circle", t: "كل قرض جر منفعة أو نفعاً للمقرض فهو ربا محرم", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "القواعد الفقهية تؤكد أن كل قرض جر منفعة فهو ربا محرم."},
+{type: "circle", t: "لا تصح الوصية بالمجهول أو المعدوم أبداً بحسب الفقه الإسلامي", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "تصح الوصية بالمجهول أو المعدوم لأنها باب تبرع وإحسان."},
+{type: "circle", t: "يسقط من أجر الإجارة بقدر مدة منع المستأجر من الانتفاع بالعين المؤجرة", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "إذا منع المستأجر يسقط من الأجر بقدر مدة المنع."},
+{type: "circle", t: "البيع بشرط الخيار جائز لمدة معلومة يحددها المتعاقدان", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "خيار الشرط جائز في البيوع لمدة معلومة."},
+{type: "circle", t: "تجوز الشركة في مأكول أو مشروب حصل باحتطاب أو اصطياد", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "تثبت شركة الأبدان أو المباحات بالاستحواذ."},
+{type: "circle", t: "المرابحة هي البيع برأس المال مع زيادة ربح معلوم متفق عليه", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "تعريف المرابحة الصحيح هو البيع بثمن السلعة الأول مع ربح معلوم."},
+{type: "circle", t: "عقد السلم يشترط فيه تأجيل البدلين معاً", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "السلم يشترط فيه تعجيل الثمن وتأجيل المبيع."},
+{type: "circle", t: "الوكالة في الإسلام عقد جايز من الطرفين غير لازم", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الوكالة عقد جائز يجوز لكل من الوكيل والموكل فسخها."}
+];
 
-            <div class="chart-section">
-                <div class="chart-title" data-i18n="chartTitle">Real-Time Bandwidth Chart</div>
-                <canvas id="speedChart"></canvas>
-            </div>
-        </section>
+let qs=[], ans=[], flags=[], i=0, left=60*60, tm=null, done=false, reviewMistakesOnly=false;
 
-        <div>
-            <div class="total-progress-container">
-                <div id="progress-fill" class="total-progress-fill"></div>
-            </div>
-            <div id="status-badge" class="status-badge" data-i18n="readyNotice">Click GO to start your speed test</div>
-        </div>
+const sh = a => {
+    let arr = a.slice();
+    for(let k = arr.length - 1; k > 0; k--){
+        const j = Math.random() * (k + 1) | 0;
+        [arr[k], arr[j]] = [arr[j], arr[k]];
+    }
+    return arr;
+};
 
-        <!-- بطاقات نتائج القياس -->
-        <section class="results-panel">
-            <div class="metric-card download">
-                <div class="metric-label" data-i18n="download">Download Speed</div>
-                <div class="metric-value-container">
-                    <span id="dl-val" class="metric-value">--</span>
-                    <span class="metric-unit">Mbps</span>
-                </div>
-            </div>
-            <div class="metric-card upload">
-                <div class="metric-label" data-i18n="upload">Upload Speed</div>
-                <div class="metric-value-container">
-                    <span id="ul-val" class="metric-value">--</span>
-                    <span class="metric-unit">Mbps</span>
-                </div>
-            </div>
-            <div class="metric-card ping">
-                <div class="metric-label" data-i18n="ping">Ping (Latency)</div>
-                <div class="metric-value-container">
-                    <span id="ping-val" class="metric-value">--</span>
-                    <span class="metric-unit">ms</span>
-                </div>
-            </div>
-        </section>
+function initExam(isReset = false) {
+    let savedSelected = localStorage.getItem("th_exam_selected_60");
+    if(!isReset && savedSelected) {
+        try { qs = JSON.parse(savedSelected); } catch(e) { qs = generateTestSet(); }
+    } else {
+        qs = generateTestSet();
+        localStorage.setItem("th_exam_selected_60", JSON.stringify(qs));
+    }
+}
 
-        <div class="actions-bar">
-            <button id="share-btn" class="lang-toggle-sticky hidden" style="position:static;" data-i18n="share">Share Result 📋</button>
-        </div>
-
-        <section class="history-section">
-            <div class="history-header">
-                <h3 data-i18n="historyTitle">Speed Test History</h3>
-                <button id="clear-history" class="lang-toggle-sticky" style="position:static; padding:0.3rem 0.8rem; font-size:0.8rem;" data-i18n="clear">Clear History</button>
-            </div>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th data-i18n="date">Date</th>
-                        <th data-i18n="download">Download Speed</th>
-                        <th data-i18n="upload">Upload Speed</th>
-                        <th data-i18n="ping">Ping (Latency)</th>
-                    </tr>
-                </thead>
-                <tbody id="history-body"></tbody>
-            </table>
-        </section>
-
-    </main>
-
-    <!-- 🌟 [إعلان 2] كود البانر النحيف السفلي 320×50 الثابت -->
-    <div class="bottom-ad-bar">
-        <script>
-          atOptions = {
-            'key' : 'c1924fb72cfab2523da6d4740022b78e',
-            'format' : 'iframe',
-            'height' : 50,
-            'width' : 320,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highrevenueformat.com/c1924fb72cfab2523da6d4740022b78e/invoke.js"></script>
-    </div>
-
-    <script>
-        const translations = {
-            ar: {
-                dir: 'rtl',
-                heroBadge: 'اختبار سرعة الألياف والجيجابت الفائق',
-                heroTitleStart: 'اختبر سرعة الإنترنت الحقيقي مع تطبيق',
-                heroSub: 'تحليل فائق الدقة لسرعات التنزيل، الرفع، والـ Ping عبر ألياف الجيجابت وشبكات 5G مع خوادم عالمية منخفضة التأخير.',
-                appBannerTitle: 'تطبيق Hero Speed للأندرويد',
-                appBannerDesc: 'قم بتنزيل التطبيق الرسمي لفحص سرعة الشبكة على هاتفك الآن مجاناً',
-                appBannerBtn: 'تحميل التطبيق (APK)',
-                feat1: 'تحليل الجيجابت الحي (Gigabit Real-Time)',
-                feat2: 'خوادم الألياف والـ 5G العالمية',
-                feat3: 'دقة البنج والزمن المنخفض (Low Latency)',
-                ip: 'عنوان IP الخاص بك:', isp: 'مزود الخدمة (ISP):', location: 'السيرفر والموقع:',
-                pressStart: 'اضغط ابدأ',
-                ping: 'البنج (Latency)', download: 'التنزيل (Download)', upload: 'الرفع (Upload)',
-                go: 'ابدأ', again: 'إعادة', chartTitle: 'الرسم البياني المباشر للنطاق الترددي (Bandwidth Chart)',
-                share: 'مشاركة النتيجة 📋', historyTitle: 'سجل اختبارات السرعة لشبكة الإنترنت', clear: 'مسح السجل',
-                date: 'التاريخ', copied: 'تم نسخ النتيجة إلى الحافظة!',
-                fetchingIp: '🌐 جاري فحص مسار الشبكة والسيرفرات...',
-                testingDl: '⬇️ جاري قياس أقصى سرعة تنزيل (Gigabit Download)...',
-                testingUl: '⬆️ جاري قياس أقصى سرعة رفع (Gigabit Upload)...',
-                calculatingPing: '⚡ قياس زمن الاستجابة والـ Ping المنخفض...',
-                readyNotice: 'اضغط "ابدأ" لبدء اختبار السرعة الفائق',
-                doneNotice: 'اكتمل اختبار السرعة بنجاح!'
-            },
-            en: {
-                dir: 'ltr',
-                heroBadge: 'Gigabit & Fiber Speed Benchmark',
-                heroTitleStart: 'Test Your Internet Speed with',
-                heroSub: 'Accurate, real-time measurements for Download, Upload, Ping, and Latency over Fiber & 5G Edge Networks.',
-                appBannerTitle: 'Hero Speed Android App',
-                appBannerDesc: 'Download our official network testing app for free right now',
-                appBannerBtn: 'Download App (APK)',
-                feat1: 'Real-Time Gigabit Analytics',
-                feat2: 'Global Fiber & 5G Edge Servers',
-                feat3: 'Ultra Low-Latency Precision',
-                ip: 'Your Public IP:', isp: 'Provider (ISP):', location: 'Server Location:',
-                pressStart: 'Click GO',
-                ping: 'Ping (Latency)', download: 'Download Speed', upload: 'Upload Speed',
-                go: 'GO', again: 'TEST AGAIN', chartTitle: 'Real-Time Bandwidth Chart',
-                share: 'Share Result 📋', historyTitle: 'Speed Test History', clear: 'Clear History',
-                date: 'Date', copied: 'Speed test results copied to clipboard!',
-                fetchingIp: '🌐 Analyzing connection & route to edge server...',
-                testingDl: '⬇️ Measuring Gigabit Download Speed...',
-                testingUl: '⬆️ Measuring Gigabit Upload Speed...',
-                calculatingPing: '⚡ Benchmarking Latency & Ping...',
-                readyNotice: 'Click GO to start your speed test',
-                doneNotice: 'Internet Speed Test Completed!'
-            }
-        };
-
-        let currentLang = 'en'; 
-        const STATE = { IDLE: 0, RUNNING: 1, DONE: 2 };
-        let currentState = STATE.IDLE;
-
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-        const els = {
-            html: document.documentElement,
-            langToggle: document.getElementById('lang-toggle'),
-            ip: document.getElementById('info-ip'),
-            isp: document.getElementById('info-isp'),
-            loc: document.getElementById('info-loc'),
-            pingVal: document.getElementById('ping-val'),
-            dlVal: document.getElementById('dl-val'),
-            ulVal: document.getElementById('ul-val'),
-            gaugeFill: document.getElementById('gauge-fill'),
-            needle: document.getElementById('needle'),
-            needleCap: document.getElementById('needle-cap'),
-            actionBtn: document.getElementById('action-btn'),
-            btnText: document.querySelector('.btn-text'),
-            liveMetrics: document.getElementById('live-metrics'),
-            liveType: document.getElementById('live-type'),
-            liveVal: document.getElementById('live-val'),
-            progressFill: document.getElementById('progress-fill'),
-            statusBadge: document.getElementById('status-badge'),
-            shareBtn: document.getElementById('share-btn'),
-            historyBody: document.getElementById('history-body'),
-            clearHistoryBtn: document.getElementById('clear-history'),
-            canvas: document.getElementById('speedChart')
-        };
-
-        const ctx = els.canvas.getContext('2d');
-        let chartPoints = [];
-
-        let targetSpeed = 0;
-        let currentGaugeSpeed = 0;
-        let isAnimationActive = false;
-        let activeColorVar = '--neon-dl';
-
-        const CONFIG = {
-            dlDurationMs: 12000,
-            ulDurationMs: 10000,
-            pingDurationMs: 3000,
-            gaugeMaxOffset: 440
-        };
-
-        function initCanvas() {
-            els.canvas.width = els.canvas.offsetWidth * window.devicePixelRatio || 300;
-            els.canvas.height = 200 * window.devicePixelRatio || 200;
+function generateTestSet() {
+    let matches = MASTER_BANK.filter(q => q.type === 'match');
+    let others = MASTER_BANK.filter(q => q.type === 'circle');
+    
+    // خلط واختيار عشوائي كلي لمجموعة جديدة من الأسئلة في كل مرة
+    let shuffledMatches = sh(matches);
+    let selectedMatches = shuffledMatches.slice(0, Math.min(2, shuffledMatches.length));
+    
+    let shuffledOthers = sh(others);
+    let selectedOthers = shuffledOthers.slice(0, 60 - selectedMatches.length);
+    
+    let combined = [...selectedMatches, ...selectedOthers];
+    let finalSet = sh(combined).map(q => {
+        if(q.type === 'circle'){
+            return { type: 'circle', t: q.t, o: q.o.length === 2 ? q.o : sh(q.o), e: q.e };
+        } else if(q.type === 'match'){
+            return { type: 'match', t: q.t, pairs: q.pairs, allTargets: sh(q.allTargets), e: q.e };
         }
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
+    });
+    return finalSet;
+}
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            els.html.setAttribute('dir', t.dir);
-            els.html.setAttribute('lang', lang);
-            
-            els.langToggle.textContent = lang === 'ar' ? 'English' : 'عربي';
+function start(reset = false){
+    if(reset) {
+        localStorage.removeItem("th_exam_selected_60");
+        localStorage.removeItem("th_exam_ans_60");
+        localStorage.removeItem("th_exam_left_60");
+        localStorage.removeItem("th_exam_i_60");
+    }
+    initExam(reset);
+    ans = new Array(qs.length).fill(null).map(() => null);
+    flags = new Array(qs.length).fill(false);
+    i = 0; left = 60*60; done = false; reviewMistakesOnly = false;
+    clearInterval(tm);
+    tm = setInterval(() => {
+        if(--left <= 0) finish();
+        else { const e = $("tm"); if(e) e.textContent = fmt(); saveState(); }
+    }, 1000);
+    draw();
+}
 
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.textContent = t[key];
-            });
+const fmt = () => String(left / 60 | 0).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
 
-            if (currentState === STATE.IDLE || currentState === STATE.DONE) {
-                els.btnText.textContent = currentState === STATE.IDLE ? t.go : t.again;
+function saveState(){
+    if(!done){
+        localStorage.setItem("th_exam_ans_60", JSON.stringify(ans));
+        localStorage.setItem("th_exam_left_60", left);
+        localStorage.setItem("th_exam_i_60", i);
+    }
+}
+
+function home(){
+    app.innerHTML = `<div class="c">
+        <div class="header-box">
+            <p style="margin:0 0 5px 0; font-weight:bold; color:var(--mu);">بسم الله الرحمن الرحيم</p>
+            <h2 style="margin:5px 0; font-size:1.15rem;">جامعة النيل الابيض • كلية علوم الحاسوب وتقانة المعلومات</h2>
+            <p style="margin:5px 0; font-weight:bold; color:var(--ac);">مادة الثقافة الإسلامية (2) - الفصل الدراسي الثاني</p>
+            <p style="margin:5px 0; font-size:0.95rem; font-weight:bold; color:var(--ok);">امتحان تجريبي شامل (60 سؤالاً متكاملاً)</p>
+            <p style="margin:5px 0; font-size:0.88rem;" class="mu">تقديم المبجل: أ/ يس علي محمد أحمد</p>
+        </div>
+        <h1>امتحان الثقافة الإسلامية 2 — شامل</h1>
+        <p class="mu" style="text-align:center;">اختبار إلكتروني تفاعلي يغطي كافة مقررات المقرر الـ 12</p>
+        <p style="margin-top:15px;">يحتوي هذا الاختبار على 60 سؤالاً متكاملاً (اختيار من متعدد، صح وخطأ، وقوائم التوصيل)، مع تلوين أرقام الأسئلة بالأخضر (عند اكتمال حلها) والأحمر (إذا بدأت حلها في القوائم ولم تكملها)، ومميزات مراجعة الأخطاء وعشوائية الأسئلة بالكامل. المدة المتاحة: 60 دقيقة.</p>
+        <button class="p" onclick="start(true)" style="width:100%; margin-top:10px;">ابدأ الامتحان الآن</button>
+        <div class="developer-credit">تم تصميم وبرمجة الموقع بواسطة الطالب المتميز: <b>محمود عبدالله آدم محمد</b></div>
+    </div>`;
+}
+
+function draw(){
+    if(done) return;
+    const q = qs[i];
+    let contentHtml = '';
+
+    if(q.type === 'circle'){
+        contentHtml = q.o.map((o, k) => `
+            <button class="o ${ans[i] === k ? 's' : ''}" onclick="pickCircle(${k})">${o.x}</button>
+        `).join("");
+    } else if(q.type === 'match'){
+        if(!ans[i]) ans[i] = {};
+        contentHtml = `<div class="match-container">` + q.pairs.map((p, idx) => `
+            <div class="match-row">
+                <div class="match-item">${p.item}</div>
+                <select class="match-select" onchange="pickMatch(${idx}, this.value)">
+                    ${q.allTargets.map(t => `<option value="${t}" ${ans[i][idx] === t ? 'selected' : ''}>${t}</option>`).join("")}
+                </select>
+            </div>
+        `).join("") + `</div>`;
+    }
+
+    app.innerHTML = `
+        <div class="top"><span class="mu">السؤال ${i+1} من ${qs.length}</span><span class="t" id="tm">${fmt()}</span></div>
+        <div class="bar"><i style="width:${(i+1)/qs.length*100}%"></i></div>
+        <div class="c">
+            <button class="flag-btn ${flags[i] ? 'active' : ''}" onclick="toggleFlag()">${flags[i] ? '★ متميز للمراجعة' : '☆ تمييز السؤال للمراجعة'}</button>
+            <p style="font-size: 1.05rem; font-weight:bold;">${q.t}</p>
+            ${contentHtml}
+        </div>
+        <div class="nav">
+            <button onclick="go(-1)" ${i === 0 ? 'disabled' : ''}>السابق</button>
+            ${i < qs.length - 1 ? `<button class="p" onclick="go(1)">التالي</button>` : `<button class="p" onclick="submitConfirm()">تسليم الامتحان</button>`}
+        </div>
+        <div class="dots">
+            ${qs.map((_, k) => {
+                let statusClass = '';
+                let state = getQuestionState(k);
+                if(state === 'full') statusClass = 'answered'; // أخضر كامل
+                else if(state === 'partial') statusClass = 'partial'; // أحمر (حل جزئي للقوائم)
+                return `<b class="${statusClass} ${k === i ? 'cur' : ''} ${flags[k] ? 'flagged' : ''}" onclick="i=${k};draw()">${k+1}</b>`;
+            }).join("")}
+        </div>
+        <div class="developer-credit">المبرمج: محمود عبدالله آدم محمد</div>`;
+}
+
+function getQuestionState(k){
+    let a = ans[k];
+    if(a === null || a === undefined) return 'empty';
+    if(qs[k].type === 'circle'){
+        return (a !== -1) ? 'full' : 'empty';
+    } else if(qs[k].type === 'match'){
+        let keys = Object.keys(a);
+        let filledCount = keys.filter(idx => a[idx] && a[idx] !== "اختر الإجابة المناسبة...").length;
+        if(filledCount === 0) return 'empty';
+        if(filledCount === qs[k].pairs.length) return 'full';
+        return 'partial'; // حل جزئي -> أحمر
+    }
+    return 'empty';
+}
+
+function isAnswered(k){
+    return getQuestionState(k) === 'full';
+}
+
+function toggleFlag(){
+    flags[i] = !flags[i];
+    if(navigator.vibrate) navigator.vibrate(30);
+    draw();
+}
+
+function pickCircle(k){ 
+    ans[i] = k; 
+    if(navigator.vibrate) navigator.vibrate(40);
+    saveState(); 
+    draw(); 
+}
+
+function pickMatch(pairIdx, val){
+    if(!ans[i]) ans[i] = {};
+    ans[i][pairIdx] = val;
+    if(navigator.vibrate) navigator.vibrate(30);
+    saveState();
+    draw();
+}
+
+function go(d){ 
+    i += d; 
+    draw(); 
+}
+
+function submitConfirm(){
+    let unans = 0;
+    qs.forEach((q, k) => { if(!isAnswered(k)) unans++; });
+    if(unans > 0){
+        if(!confirm(`تنبيه: لديك ${unans} سؤال لم تكتمل الإجابة عليها. هل أنت متأكد من رغبتك في تسليم الامتحان؟`)) return;
+    }
+    finish();
+}
+
+function finish(mistakesOnly = false){
+    clearInterval(tm);
+    done = true;
+    reviewMistakesOnly = mistakesOnly;
+    localStorage.removeItem("th_exam_selected_60");
+
+    let s = 0;
+    qs.forEach((q, k) => {
+        if(q.type === 'circle'){
+            if(ans[k] !== null && ans[k] !== -1 && q.o[ans[k]].r) s++;
+        } else if(q.type === 'match'){
+            if(ans[k]){
+                let correctAll = true;
+                q.pairs.forEach((p, idx) => {
+                    if(ans[k][idx] !== p.target) correctAll = false;
+                });
+                if(correctAll) s++;
             }
-
-            renderHistory();
         }
+    });
+    const wrongCount = qs.length - s;
+    const p = Math.round(s / qs.length * 100);
 
-        els.langToggle.addEventListener('click', () => {
-            setLanguage(currentLang === 'ar' ? 'en' : 'ar');
-        });
-
-        function startGaugePhysics() {
-            if (isAnimationActive) return;
-            isAnimationActive = true;
-
-            function animate() {
-                if (!isAnimationActive) return;
-
-                currentGaugeSpeed += (targetSpeed - currentGaugeSpeed) * 0.085;
-
-                const maxScale = 120;
-                const percentage = Math.min(Math.max(currentGaugeSpeed / maxScale, 0), 1);
-                const offset = CONFIG.gaugeMaxOffset - (CONFIG.gaugeMaxOffset * percentage);
-                
-                els.gaugeFill.style.strokeDashoffset = offset;
-                els.gaugeFill.style.stroke = `var(${activeColorVar})`;
-                els.needleCap.style.color = `var(${activeColorVar})`;
-
-                const angle = -120 + (percentage * 240);
-                els.needle.style.transform = `rotate(${angle}deg)`;
-
-                if (els.liveVal) {
-                    els.liveVal.textContent = Math.max(0, currentGaugeSpeed).toFixed(1);
+    let displayList = qs.map((q, k) => ({q, k}));
+    if(reviewMistakesOnly){
+        displayList = displayList.filter(({q, k}) => {
+            let isCorrect = false;
+            if(q.type === 'circle') isCorrect = (ans[k] !== null && ans[k] !== -1 && q.o[ans[k]].r);
+            else if(q.type === 'match') {
+                if(ans[k]){
+                    let ok = true;
+                    q.pairs.forEach((p, idx) => { if(ans[k][idx] !== p.target) ok = false; });
+                    isCorrect = ok;
                 }
-
-                requestAnimationFrame(animate);
             }
-            requestAnimationFrame(animate);
-        }
-
-        function stopGaugePhysics() {
-            isAnimationActive = false;
-            targetSpeed = 0;
-            currentGaugeSpeed = 0;
-        }
-
-        async function fetchNetworkInfo() {
-            els.ip.textContent = currentLang === 'ar' ? 'جاري الاتصال...' : 'Connecting...';
-            els.isp.textContent = currentLang === 'ar' ? 'جاري التحليل...' : 'Resolving...';
-            els.loc.textContent = currentLang === 'ar' ? 'تحديد الموقع...' : 'Locating...';
-
-            const minWait = sleep(1200);
-            let result = { 
-                ip: 'Active IP', 
-                isp: currentLang === 'ar' ? 'مزود محلي' : 'Local ISP', 
-                loc: currentLang === 'ar' ? 'منطقة تلقائية' : 'Auto Region' 
-            };
-
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
-                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
-                clearTimeout(timeoutId);
-                
-                if (res.ok) {
-                    const data = await res.json();
-                    result.ip = data.ip || result.ip;
-                    result.isp = data.org || data.asn || result.isp;
-                    result.loc = `${data.city || ''}, ${data.country_name || ''}`;
-                }
-            } catch (e) {
-                try {
-                    const res2 = await fetch('https://api.ipify.org?format=json');
-                    if (res2.ok) {
-                        const data2 = await res2.json();
-                        result.ip = data2.ip;
-                    }
-                } catch(err) {}
-            }
-
-            await minWait;
-
-            els.ip.removeAttribute('data-i18n');
-            els.isp.removeAttribute('data-i18n');
-            els.loc.removeAttribute('data-i18n');
-
-            els.ip.textContent = result.ip;
-            els.isp.textContent = result.isp;
-            els.loc.textContent = result.loc;
-        }
-
-        function drawChart(colorHex) {
-            ctx.clearRect(0, 0, els.canvas.width, els.canvas.height);
-            if (chartPoints.length < 2) return;
-
-            const step = els.canvas.width / (chartPoints.length - 1);
-            const maxVal = Math.max(...chartPoints, 20);
-
-            const gradient = ctx.createLinearGradient(0, 0, 0, els.canvas.height);
-            gradient.addColorStop(0, colorHex + '44');
-            gradient.addColorStop(1, 'transparent');
-
-            ctx.beginPath();
-            chartPoints.forEach((pt, i) => {
-                const x = i * step;
-                const y = els.canvas.height - ((pt / maxVal) * (els.canvas.height - 30)) - 10;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
-            ctx.lineTo((chartPoints.length - 1) * step, els.canvas.height);
-            ctx.lineTo(0, els.canvas.height);
-            ctx.fillStyle = gradient;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.lineWidth = 3.5 * window.devicePixelRatio;
-            ctx.strokeStyle = colorHex;
-            chartPoints.forEach((pt, i) => {
-                const x = i * step;
-                const y = els.canvas.height - ((pt / maxVal) * (els.canvas.height - 30)) - 10;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-        }
-
-        function setLiveMetrics(typeStr, colorVar, colorHex) {
-            els.liveType.textContent = typeStr;
-            els.liveType.style.color = `var(${colorVar})`;
-            activeColorVar = colorVar;
-
-            if (currentGaugeSpeed > 0) {
-                chartPoints.push(parseFloat(currentGaugeSpeed.toFixed(1)));
-                drawChart(colorHex);
-            }
-        }
-
-        function setProgress(percentage) {
-            els.progressFill.style.width = Math.min(percentage, 100) + '%';
-        }
-
-        async function runDownloadPhase() {
-            chartPoints = [];
-            const startTime = performance.now();
-            let totalBytes = 0;
-            let samples = [];
-            let speedHistory = [];
-            const controller = new AbortController();
-
-            const getInstantSpeed = (now, bytes) => {
-                samples.push({ time: now, bytes: bytes });
-                samples = samples.filter(s => now - s.time <= 700);
-                if (samples.length < 2) return 0;
-                const oldest = samples[0];
-                const newest = samples[samples.length - 1];
-                const timeSpan = (newest.time - oldest.time) / 1000;
-                if (timeSpan <= 0) return 0;
-                return (((newest.bytes - oldest.bytes) * 8) / 1000000) / timeSpan;
-            };
-
-            const downloadTask = async () => {
-                while (performance.now() - startTime < CONFIG.dlDurationMs) {
-                    try {
-                        const res = await fetch(`https://speed.cloudflare.com/__down?bytes=20000000&cb=${Math.random()}`, {
-                            signal: controller.signal, cache: 'no-store'
-                        });
-
-                        if (!res.ok || !res.body) break;
-                        const reader = res.body.getReader();
-
-                        while (true) {
-                            const now = performance.now();
-                            const elapsed = now - startTime;
-                            if (elapsed >= CONFIG.dlDurationMs) break;
-
-                            const { done, value } = await reader.read();
-                            if (done) break;
-
-                            totalBytes += value.length;
-
-                            if (elapsed > 500) {
-                                const rawInstSpeed = getInstantSpeed(now, totalBytes);
-                                if (rawInstSpeed > 0) {
-                                    speedHistory.push(rawInstSpeed);
-                                    targetSpeed = rawInstSpeed;
-
-                                    setLiveMetrics(translations[currentLang].download, '--neon-dl', '#00f2fe');
-                                    setProgress((elapsed / CONFIG.dlDurationMs) * 40);
-                                }
-                            }
-                        }
-                    } catch (e) {
-                        await sleep(100);
-                    }
-                }
-            };
-
-            await Promise.all([downloadTask(), downloadTask(), downloadTask()]);
-            controller.abort();
-
-            let finalSpeed = "0.0";
-            if (speedHistory.length > 0) {
-                const sorted = [...speedHistory].sort((a,b) => a - b);
-                const trimmed = sorted.slice(Math.floor(sorted.length * 0.2), Math.floor(sorted.length * 0.85));
-                const sum = trimmed.reduce((a, b) => a + b, 0);
-                finalSpeed = (trimmed.length > 0 ? (sum / trimmed.length) : sorted[sorted.length - 1]).toFixed(1);
-            }
-            return finalSpeed;
-        }
-
-        function runUploadPhase() {
-            return new Promise((resolve) => {
-                chartPoints = [];
-                let samples = [];
-                let speedHistory = [];
-                const startTime = performance.now();
-                const chunk = new Uint8Array(4 * 1024 * 1024);
-
-                const getInstantSpeed = (now, loaded) => {
-                    samples.push({ time: now, bytes: loaded });
-                    samples = samples.filter(s => now - s.time <= 700);
-                    if (samples.length < 2) return 0;
-                    const oldest = samples[0];
-                    const newest = samples[samples.length - 1];
-                    const timeSpan = (newest.time - oldest.time) / 1000;
-                    if (timeSpan <= 0) return 0;
-                    return (((newest.bytes - oldest.bytes) * 8) / 1000000) / timeSpan;
-                };
-
-                const xhr = new XMLHttpRequest();
-                xhr.upload.onprogress = (event) => {
-                    if (event.lengthComputable) {
-                        const now = performance.now();
-                        const elapsed = now - startTime;
-
-                        if (elapsed > 400) {
-                            const rawInstSpeed = getInstantSpeed(now, event.loaded);
-                            if (rawInstSpeed > 0) {
-                                speedHistory.push(rawInstSpeed);
-                                targetSpeed = rawInstSpeed;
-
-                                setLiveMetrics(translations[currentLang].upload, '--neon-ul', '#b537f2');
-                                setProgress(45 + ((elapsed / CONFIG.ulDurationMs) * 40));
-                            }
-                        }
-                    }
-                };
-
-                const finishUpload = () => {
-                    let finalSpeed = "0.0";
-                    if (speedHistory.length > 0) {
-                        const sorted = [...speedHistory].sort((a,b) => a - b);
-                        const trimmed = sorted.slice(Math.floor(sorted.length * 0.2), Math.floor(sorted.length * 0.85));
-                        const sum = trimmed.reduce((a, b) => a + b, 0);
-                        finalSpeed = (trimmed.length > 0 ? (sum / trimmed.length) : sorted[sorted.length - 1]).toFixed(1);
-                    }
-                    resolve(finalSpeed);
-                };
-
-                xhr.onload = xhr.ontimeout = xhr.onerror = finishUpload;
-                xhr.timeout = CONFIG.ulDurationMs;
-
-                xhr.open("POST", "https://speed.cloudflare.com/__up", true);
-                xhr.send(chunk);
-            });
-        }
-
-        async function runPingPhase() {
-            let pings = [];
-            const startTime = performance.now();
-            
-            while (performance.now() - startTime < CONFIG.pingDurationMs) {
-                const start = performance.now();
-                try {
-                    await fetch('https://speed.cloudflare.com/__down?bytes=0&cb=' + Math.random(), { mode: 'no-cors', cache: 'no-store' });
-                    pings.push(performance.now() - start);
-                } catch (e) {}
-                await sleep(80);
-                setProgress(88 + (((performance.now() - startTime) / CONFIG.pingDurationMs) * 12));
-            }
-
-            const finalPing = pings.length > 0 ? Math.round(Math.min(...pings)) : 16;
-            return finalPing;
-        }
-
-        async function runSpeedTest() {
-            if (currentState === STATE.RUNNING) return;
-            currentState = STATE.RUNNING;
-
-            els.actionBtn.classList.add('hidden');
-            els.shareBtn.classList.add('hidden');
-            els.liveMetrics.classList.remove('hidden');
-            setProgress(0);
-            
-            els.pingVal.textContent = '--';
-            els.dlVal.textContent = '--';
-            els.ulVal.textContent = '--';
-
-            startGaugePhysics();
-
-            els.statusBadge.textContent = translations[currentLang].fetchingIp;
-            await fetchNetworkInfo();
-            await sleep(600);
-
-            els.statusBadge.textContent = translations[currentLang].testingDl;
-            activeColorVar = '--neon-dl';
-            const dlRes = await runDownloadPhase();
-            const dlValNum = parseFloat(dlRes) || 0;
-            
-            els.dlVal.textContent = dlRes;
-            targetSpeed = dlValNum;
-            await sleep(2000); 
-
-            targetSpeed = 0;
-            await sleep(800); 
-
-            els.statusBadge.textContent = translations[currentLang].testingUl;
-            activeColorVar = '--neon-ul';
-            const ulRes = await runUploadPhase();
-            const ulValNum = parseFloat(ulRes) || 0;
-            
-            els.ulVal.textContent = ulRes;
-            targetSpeed = ulValNum;
-            await sleep(2000); 
-
-            targetSpeed = 0;
-            await sleep(800); 
-
-            els.statusBadge.textContent = translations[currentLang].calculatingPing;
-            activeColorVar = '--neon-ping';
-            const pingRes = await runPingPhase();
-            els.pingVal.textContent = pingRes;
-
-            await sleep(600);
-
-            stopGaugePhysics();
-            setProgress(100);
-            currentState = STATE.DONE;
-            els.liveMetrics.classList.add('hidden');
-            els.actionBtn.classList.remove('hidden');
-            els.shareBtn.classList.remove('hidden');
-            els.btnText.textContent = translations[currentLang].again;
-            els.statusBadge.textContent = translations[currentLang].doneNotice;
-
-            saveHistory({
-                date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                dl: dlRes,
-                ul: ulRes,
-                ping: pingRes
-            });
-        }
-
-        function saveHistory(result) {
-            let history = JSON.parse(localStorage.getItem('hero_history') || '[]');
-            history.unshift(result);
-            if (history.length > 5) history.pop();
-            localStorage.setItem('hero_history', JSON.stringify(history));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            let history = JSON.parse(localStorage.getItem('hero_history') || '[]');
-            els.historyBody.innerHTML = '';
-            history.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.date}</td>
-                    <td>${item.dl} Mbps</td>
-                    <td>${item.ul} Mbps</td>
-                    <td>${item.ping} ms</td>
-                `;
-                els.historyBody.appendChild(tr);
-            });
-        }
-
-        els.clearHistoryBtn.addEventListener('click', () => {
-            localStorage.removeItem('hero_history');
-            renderHistory();
+            return !isCorrect;
         });
-        renderHistory();
+    }
 
-        els.shareBtn.addEventListener('click', () => {
-            const summary = `🚀 Hero Speed Test Results:\nDownload: ${els.dlVal.textContent} Mbps\nUpload: ${els.ulVal.textContent} Mbps\nPing: ${els.pingVal.textContent} ms`;
-            navigator.clipboard.writeText(summary);
-            alert(translations[currentLang].copied);
-        });
+    app.innerHTML = `
+        <div class="c">
+            <div class="big">${s} / ${qs.length}</div>
+            <p style="text-align:center; font-size:1.2rem;"><b>النتيجة: ${p}%</b> — ${p>=85?"ممتاز جداً! 🌟":p>=70?"جيد جداً! ✨":p>=50?"مقبول، راجع الأخطاء بعناية. 📚":"تحتاج لمراجعة المحاضرات بشكل أفضل. 💡"}</p>
+            
+            <div class="stats-box">
+                <div class="stat-item"><div class="mu">الإجابات الصحيحة</div><div class="stat-num" style="color:var(--ok);">${s}</div></div>
+                <div class="stat-item"><div class="mu">الإجابات الخاطئة</div><div class="stat-num" style="color:var(--no);">${wrongCount}</div></div>
+                <div class="stat-item"><div class="mu">النسبة المئوية</div><div class="stat-num">${p}%</div></div>
+            </div>
 
-        els.actionBtn.addEventListener('click', runSpeedTest);
-    </script>
+            <button class="p" onclick="start(true)" style="width:100%; margin-top:10px;">إعادة الامتحان بأسئلة جديدة وعشوائية 🔄</button>
+            <button onclick="finish(${!reviewMistakesOnly})" style="width:100%; margin-top:8px; border-color:var(--ac); color:var(--ac);">${reviewMistakesOnly ? 'عرض كافة الأسئلة والنتيجة' : 'مراجعة الأخطاء فقط (' + wrongCount + ')'}</button>
+            <button onclick="shareResult(${s}, ${qs.length}, ${p})" style="width:100%; margin-top:8px; background:#25d366; color:#fff; border:none; font-weight:bold;">مشاركة النتيجة 📱</button>
+            <button onclick="home()" style="width:100%; margin-top:8px;">العودة للرئيسية</button>
+        </div>` +
+        (reviewMistakesOnly && displayList.length === 0 ? `<div class="c" style="text-align:center; color:var(--ok);"><h3>ممتاز جداً! ليس لديك أي أخطاء لمراجعتها 🎉</h3></div>` : '') +
+        displayList.map(({q, k}) => {
+            let resHtml = '';
+            if(q.type === 'circle'){
+                resHtml = q.o.map((o, j) => `<div class="o ${o.r ? 'ok' : j == ans[k] ? 'no' : ''}" style="cursor:default"><span>${o.x}</span> ${o.r ? '✓' : j == ans[k] ? '✗' : ''}</div>`).join("");
+            } else if(q.type === 'match'){
+                resHtml = `<div class="match-container">` + q.pairs.map((p, idx) => {
+                    let userAns = ans[k] ? ans[k][idx] : "لم تُجب";
+                    let isRight = userAns === p.target;
+                    return `<div class="match-row" style="border-color:${isRight ? 'var(--ok)' : 'var(--no)'}">
+                        <div class="match-item">${p.item}</div>
+                        <div style="flex:1; color:${isRight ? 'var(--ok)' : 'var(--no)'}; font-weight:bold;">اخترت: ${userAns} ${isRight ? '✓' : '✗ (الصحيح: ' + p.target + ')'}</div>
+                    </div>`;
+                }).join("") + `</div>`;
+            }
+            return `<div class="c">
+                <p><b>${k+1}. ${q.t}</b></p>
+                ${resHtml}
+                <div class="ex">${!isAnswered(k) ? 'لم تُجب على هذا السؤال بشكل كامل. ' : ''}${q.e}</div>
+            </div>`;
+        }).join("") +
+        `<div class="c">
+            <div class="developer-credit" style="margin-top:10px;">تصميم وتطوير: محمود عبدالله آدم محمد</div>
+        </div>`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function shareResult(score, total, percentage){
+    const text = `📊 نتيجة امتحان الثقافة الإسلامية (2)\nالدرجة: ${score} من ${total} (${percentage}%)\nتصميم وبرمجة: محمود عبدالله آدم محمد`;
+    if(navigator.share){
+        navigator.share({title: 'نتيجة الامتحان', text: text}).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text);
+        alert('تم نسخ تفاصيل النتيجة بنجاح! يمكنك لصقها ومشاركتها في واتساب.');
+    }
+}
+
+const $=id=>document.getElementById(id), app=$("app");
+home();
+</script>
 </body>
 </html>
