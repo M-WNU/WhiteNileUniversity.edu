@@ -1,517 +1,437 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة تقانة المعلومات - تسجيل الدخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ربط مكتبات Firebase الأساسية -->
-    <script src="https://www.gstatic.com/firebasejs/13.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore-compat.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>امتحان تقنيات الإنترنت — شامل</title>
+<style>
+:root{box-sizing:border-box;--bg:#121a17;--card:#1b2622;--tx:#e8efeb;--mu:#93a39b;--ac:#3fbf96;--ok:#4cc27d;--no:#ef6b5b;--bd:#2d3b35;--warn:#f39c12}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma, Arial, sans-serif;line-height:1.8}
+.w{max-width:720px;margin:0 auto;padding:16px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+h1{font-size:1.5rem;margin:.2em 0;font-weight:bold;text-align:center;color:var(--ac)}
+.header-box{text-align:center;border-bottom:2px dashed var(--bd);padding-bottom:12px;margin-bottom:14px}
+.mu{color:var(--mu);font-size:.92rem}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:12px 18px;transition:all .2s}
+button:active{transform:scale(0.98)}
+.p{background:var(--ac);color:#121a17;border-color:var(--ac);font-weight:bold}
+.o{display:block;width:100%;text-align:right;margin:10px 0;padding:14px 16px;border-radius:12px;font-size:1rem;border:1px solid var(--bd);background:var(--card);cursor:pointer}
+.o.s{border-color:var(--ac);outline:2px solid var(--ac);background:color-mix(in srgb, var(--ac) 15%, var(--card))}
+.o.ok{border-color:var(--ok);background:#1a3a2a}
+.o.no{border-color:var(--no);background:#3a1a1a}
 
-    <style>
-        :root {
-            --primary: #f97316;
-            --primary-dark: #ea580c;
-            --primary-light: #ffedd5;
-            --bg: #fdfbf7;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #fed7aa;
-        }
+.match-container{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.match-row{display:flex;justify-content:space-between;align-items:center;background:#23332c;padding:12px;border-radius:10px;border:1px solid var(--bd);gap:10px}
+.match-item{flex:1;font-weight:bold;font-size:0.95rem}
+.match-select{flex:1;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px;font-family:inherit;font-size:0.9rem;cursor:pointer}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: 0.25s ease; }
-        body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-
-        .login-card {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 440px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.1);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-header-3d {
-            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lang-select-box {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 5px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--primary);
-            background: #fff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .illustration-3d {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(5px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15);
-            animation: floatAnim 3s ease-in-out infinite;
-        }
-
-        @keyframes floatAnim {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .card-body-content { padding: 30px; }
-
-        h1 { font-size: 1.5rem; font-weight: 900; color: var(--text); margin-bottom: 5px; text-align: center; }
-        p.subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px; text-align: center; }
-
-        .form-group { margin-bottom: 18px; position: relative; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-        
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 14px;
-            background: #f8fafc;
-            padding: 0 14px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
-        }
-        .input-wrapper:focus-within {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
-        }
-
-        .input-wrapper i { color: var(--text-muted); margin-left: 10px; font-size: 0.95rem; }
-        .input-wrapper input { width: 100%; padding: 13px 0; border: none; background: transparent; outline: none; font-size: 0.92rem; color: var(--text); }
-        .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; user-select: none; }
-        .eye-icon:hover { color: var(--primary); }
-
-        .name-indicator { font-size: 0.78rem; margin-top: 5px; font-weight: 700; display: block; }
-
-        .password-notice-box {
-            background: #fff7ed;
-            border: 1.5px dashed #fdba74;
-            padding: 12px 15px;
-            border-radius: 14px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: #c2410c;
-            font-weight: 700;
-        }
-        .password-notice-box i { font-size: 1.2rem; color: var(--primary); }
-
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 5px;
-            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
-            transition: 0.3s;
-        }
-        .btn-submit:hover { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); transform: translateY(-1px); }
-
-        .switch-mode, .back-footer { text-align: center; margin-top: 18px; font-size: 0.88rem; color: var(--text-muted); }
-        .switch-mode a, .back-footer a { color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
-        .switch-mode a:hover, .back-footer a:hover { text-decoration: underline; }
-
-        .hidden-view { display: none !important; }
-        .extras-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-top: 8px; margin-bottom: 15px; }
-
-        /* ===== نافذة الـ Loading والتنبيهات الفاخرة المتحركة ===== */
-        .luxury-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); z-index: 99999;
-            display: flex; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .luxury-modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .luxury-modal-card {
-            background: #ffffff; width: 100%; max-width: 380px; padding: 32px 24px; border-radius: 26px;
-            text-align: center; box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.25);
-            border: 1px solid rgba(254, 215, 170, 0.8); transform: scale(0.85) translateY(15px);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden;
-        }
-        .luxury-modal-overlay.active .luxury-modal-card { transform: scale(1) translateY(0); }
-        
-        .luxury-modal-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
-            background: linear-gradient(90deg, #f97316, #ea580c, #f59e0b);
-        }
-
-        .loader-orbit {
-            width: 60px; height: 60px; border: 4px solid #ffedd5; border-top: 4px solid var(--primary);
-            border-radius: 50%; animation: orbitSpin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-            margin: 0 auto 18px auto; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
-        }
-        @keyframes orbitSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .modal-icon-container {
-            width: 65px; height: 65px; background: #fff7ed; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px auto; font-size: 1.8rem; color: var(--primary); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-        }
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
-
-        .modal-title-text { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-bottom: 8px; }
-        .modal-desc-text { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 22px; line-height: 1.6; }
-        
-        .luxury-btn {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; border: none;
-            padding: 12px 25px; border-radius: 14px; font-weight: 800; font-size: 0.92rem; cursor: pointer;
-            width: 100%; box-shadow: 0 6px 18px rgba(249, 115, 22, 0.25); transition: 0.2s;
-        }
-        .luxury-btn:hover { opacity: 0.92; transform: translateY(-1px); }
-    </style>
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:bold}
+.bar{height:8px;background:var(--bd);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--ac)}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:16px}
+.dots{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.dots b{width:34px;height:34px;border-radius:10px;border:1px solid var(--bd);display:grid;place-items:center;font-size:.85rem;cursor:pointer;font-weight:bold;position:relative;background:var(--card);color:var(--tx)}
+.dots b.answered{background:var(--ok);color:#121a17;border-color:var(--ok)}
+.dots b.partial{background:var(--no);color:#fff;border-color:var(--no)}
+.dots b.cur{outline:3px solid var(--tx)}
+.dots b.flagged::after{content:'★';position:absolute;top:-4px;right:-4px;color:var(--warn);font-size:10px}
+.ex{background:#23332c;border-radius:12px;padding:12px 16px;margin-top:10px;font-size:.95rem}
+.big{font-size:3rem;font-weight:bold;color:var(--ac);text-align:center}
+.t{font-weight:bold}
+.flag-btn{background:transparent;border:1px solid var(--warn);color:var(--warn);padding:6px 12px;font-size:0.85rem;border-radius:8px;margin-bottom:10px;display:inline-flex;align-items:center;gap:5px}
+.flag-btn.active{background:var(--warn);color:#121a17}
+.stats-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0;text-align:center}
+.stat-item{background:#23332c;padding:10px;border-radius:10px;border:1px solid var(--bd)}
+.stat-num{font-size:1.2rem;font-weight:bold;color:var(--ac)}
+.developer-credit{margin-top:15px;font-size:0.88rem;color:var(--mu);text-align:center;border-top:1px solid var(--bd);padding-top:10px}
+code{background:#121a17;padding:2px 6px;border-radius:4px;color:var(--ac);font-family:monospace}
+</style>
 </head>
 <body>
+<div class="w" id="app"></div>
+<script>
+const MASTER_BANK=[
+// قوائم التوصيل (قائمتان أساسيتان)
+{
+    type: "match",
+    t: "صل طرق ووسائط الارتباط بالإنترنت بما يناسبها تماماً:",
+    pairs: [
+        { item: "الطلب الهاتفي (Dial-up)", target: "شائع للأفراد عبر مودم ومحسوب على خط الهاتف العادي وبسرعة تصل إلى 56 كيلوبت/ثانية" },
+        { item: "الخطوط المخصصة (Leased Lines)", target: "اتصال دائم للشركات والجامعات عبر خط مستأجر مكلف ودائم على مدار الساعة" },
+        { item: "خط المشترك الرقمي (ADSL)", target: "نفاذ سريع دائم عبر خطوط الهاتف النحاسية العادية مع إمكانية إجراء المكالمات معاً" },
+        { item: "الأقمار الاصطناعية (Satellite)", target: "حل دائم وسريع للمناطق النائية التي لا توفر تقنيات أرضية سريعة" }
+    ],
+    allTargets: [
+        "اختر الإجابة المناسبة...",
+        "شائع للأفراد عبر مودم ومحسوب على خط الهاتف العادي وبسرعة تصل إلى 56 كيلوبت/ثانية",
+        "اتصال دائم للشركات والجامعات عبر خط مستأجر مكلف ودائم على مدار الساعة",
+        "نفاذ سريع دائم عبر خطوط الهاتف النحاسية العادية مع إمكانية إجراء المكالمات معاً",
+        "حل دائم وسريع للمناطق النائية التي لا توفر تقنيات أرضية سريعة",
+        "شبكة داخلية محمية بجدار نار للمؤسسات",
+        "ربط شبكات إنترانت للشركاء عبر الإنترنت"
+    ],
+    e: "مراجعة شاملة لوسائط وطرق الارتباط بالإنترنت."
+},
+{
+    type: "match",
+    t: "صل بروتوكولات الإنترنت ووظائفها الأساسية:",
+    pairs: [
+        { item: "TCP", target: "ينشئ وصلة ويرسل رزم البيانات ويوثق وصولها ويكتشف الأخطاء" },
+        { item: "IP", target: "مسؤول عن حزم وعنونة وتوجيه رزم البيانات عبر الشبكة بالاعتماد على الموجهات" },
+        { item: "HTTP", target: "تستخدمه المتصفحات لجلب الوثائق ذات الوصلات المتشعبة من الويب" },
+        { item: "SMTP", target: "يستخدم في إدارة وتنظيم وتبادل رسائل البريد الإلكتروني" }
+    ],
+    allTargets: [
+        "اختر الإجابة المناسبة...",
+        "ينشئ وصلة ويرسل رزم البيانات ويوثق وصولها ويكتشف الأخطاء",
+        "مسؤول عن حزم وعنونة وتوجيه رزم البيانات عبر الشبكة بالاعتماد على الموجهات",
+        "تستخدمه المتصفحات لجلب الوثائق ذات الوصلات المتشعبة من الويب",
+        "يستخدم في إدارة وتنظيم وتبادل رسائل البريد الإلكتروني",
+        "الدخول عن بعد على الشبكة لتنفيذ الأوامر",
+        "تحويل العنوان الحرفي إلى عنوان رقمي IP"
+    ],
+    e: "بروتوكولات الإنترنت الأساسية (TCP, IP, HTTP, SMTP)."
+},
 
-    <!-- نافذة الـ Loading والتنبيهات الفاخرة -->
-    <div id="luxury-loader-modal" class="luxury-modal-overlay">
-        <div class="luxury-modal-card">
-            <div id="loader-spinner-elem" class="loader-orbit"></div>
-            <div id="loader-icon-container" class="modal-icon-container" style="display: none;">
-                <i id="loader-icon-elem" class="fa-solid"></i>
-            </div>
-            
-            <h3 id="loader-title-text" class="modal-title-text">جاري معالجة الطلب...</h3>
-            <p id="loader-desc-text" class="modal-desc-text">يرجى الانتظار قليلاً.</p>
-            
-            <button id="loader-action-btn" class="luxury-btn hidden-element" onclick="closeLuxuryModal()">حسناً</button>
+// أسئلة الاختيار من متعدد، الصح والخطأ، وأكواد الاستعلامات (تتجاوز 80 سؤالاً)
+{type: "circle", t: "في العنوان <code>http://www.gcpa.edu.sa/edarat/ryaidh.htm</code> يشير الرمز <code>edu</code> إلى:", o: [{x:"مؤسسة أو هئية تعليمية", r:true}, {x:"هيئة تجارية", r:false}, {x:"دولة السعودية", r:false}, {x:"خدمة بريد إلكتروني", r:false}], e: "الرمز edu يشير إلى المؤسسات التعليمية."},
+{type: "circle", t: "الاستعلام <code>Intitle:internet</code> يستخدم للبحث عن:", o: [{x:"جميع الصفحات التي تحتوي عناوينها على كلمة internet", r:true}, {x:"المواقع التي تحتوي عناوينها الحرفية على internet", r:false}, {x:"كلمة sudan في موقع ياهوو", r:false}, {x:"روابط تشعبية لموقع معين", r:false}], e: "intitle تستخدم للبحث في عناوين الصفحات."},
+{type: "circle", t: "الاستعلام <code>Inurl:internet</code> يستخدم للبحث عن:", o: [{x:"المواقع التي تحتوي عناوينها الحرفية على internet", r:true}, {x:"الصفحات التي تحتوي عناوينها على internet", r:false}, {x:"البحث في نطاق edu", r:false}, {x:"معلومات موقع معين", r:false}], e: "inurl تستخدم للبحث في العناوين الحرفية (URLs)."},
+{type: "circle", t: "الاستعلام <code>Link:www.hp.com</code> يستخدم للبحث عن:", o: [{x:"المواضع التي تحتوي رابطاً تشعبياً لموقع شركة HP", r:true}, {x:"معلومات تخص موقع HP", r:false}, {x:"كلمة sudan في الموقع", r:false}, {x:"الصفحات التي تحتوي عناوينها على HP", r:false}], e: "Link تستخدم للبحث عن روابط تشعبية لموقع معين."},
+{type: "circle", t: "الاستعلام <code>Info:www.f3f3.com</code> يستخدم للبحث عن:", o: [{x:"معلومات تخص موقع معين", r:true}, {x:"روابط تشعبية لموقع معين", r:false}, {x:"البحث في نطاق معين", r:false}, {x:"البحث في عناوين الصفحات", r:false}], e: "info تستخدم للبحث عن معلومات تخص موقع معين."},
+{type: "circle", t: "الاستعلام <code>intitle: internet site:edu</code> يهدف إلى:", o: [{x:"البحث عن عناوين الصفحات التي تحتوي Internet مع تخصيص نطاق edu", r:true}, {x:"البحث عن كلمة sudan فقط", r:false}, {x:"استثناء كلمات البحث", r:false}, {x:"البحث باستخدام علامة التنصيص", r:false}], e: "هذا الاستعلام يبحث في العناوين مع تخصيص النطاق edu."},
+{type: "circle", t: "بدأت أولى محاولات بناء التواصل عبر الشبكات المحلية (LAN) في عام:", o: [{x:"1964م", r:true}, {x:"1969م", r:false}, {x:"1972م", r:false}, {x:"1983م", r:false}], e: "بدأت محاولات الشبكات المحلية LAN في عام 1964م."},
+{type: "circle", t: "ظهرت الشبكات الواسعة (WAN) لأول مرة في عام:", o: [{x:"1966م", r:true}, {x:"1964م", r:false}, {x:"1976م", r:false}, {x:"1992م", r:false}], e: "ظهرت الشبكات الواسعة WAN في عام 1966م."},
+{type: "circle", t: "التطبيق العملي لاستخدام تقنيات الإنترنت في الشبكة الداخلية للمؤسسة مع جدار نار يسمى:", o: [{x:"الإنترانت (Intranet)", r:true}, {x:"الإكسترانت (Extranet)", r:false}, {x:"الشبكة الواسعة", r:false}, {x:"الشبكة النسيجية", r:false}], e: "الإنترانت هي شبكة المؤسسة الداخلية المحمية بجدار نار."},
+{type: "circle", t: "الشبكة التي تربط شبكات الإنترانت الخاصة بالشركاء والمزودين عبر الإنترنت تسمى:", o: [{x:"الإكسترانت (Extranet)", r:true}, {x:"الإنترانت (Intranet)", r:false}, {x:"الشبكة المحلية", r:false}, {x:"الشبكة النسيجية", r:false}], e: "الإكسترانت تربط شبكات الإنترانت للشركاء والمتعاملين."},
+{type: "circle", t: "ظهرت الإنترنت كنتيجة لمشروع أطلق عام 1969 من قبل وزارة دفاع الولايات المتحدة يدعى:", o: [{x:"ARPA", r:true}, {x:"CERN", r:false}, {x:"NSFNET", r:false}, {x:"ISOC", r:false}], e: "ظهرت نتيجة لمشروع ARPA عام 1969."},
+{type: "circle", t: "في أي عام أصبح بروتوكول TCP/IP بروتوكولاً معيارياً لشبكة ARPANET:", o: [{x:"1983م", r:true}, {x:"1973م", r:false}, {x:"1981م", r:false}, {x:"1993م", r:false}], e: "أصبح بروتوكول TCP/IP معيارياً في 1 يناير 1983م."},
+{type: "circle", t: "نظام اسم النطاق (DNS) تم استحداثه لأول مرة في عام:", o: [{x:"1983م", r:true}, {x:"1971م", r:false}, {x:"1992م", r:false}, {x:"1995م", r:false}], e: "استحدث نظام DNS عام 1983م."},
+{type: "circle", t: "نشأت فكرة الشبكة النسيجية العالمية (WWW) عام 1992م في المختبر الأوروبي:", o: [{x:"لعلم الفيزياء الجسيمات (CERN)", r:true}, {x:"لأبحاث الفضاء ناسا", r:false}, {x:"للدفاع الأمريكي", r:false}, {x:"للكومبيوترات المتقدمة", r:false}], e: "نشأت في مختبر CERN الأوروبي لفيزياء الجسيمات عام 1992."},
+{type: "circle", t: "العنوان الرقمي (IP Address) يتشكل من أربعة أرقام تفصلها نقطة ويتراوح كل رقم بين:", o: [{x:"0 و 255", r:true}, {x:"1 و 100", r:false}, {x:"0 و 999", r:false}, {x:"10 و 500", r:false}], e: "كل رقم في عنوان IP يتراوح بين 0 و 255."},
+{type: "circle", t: "رمز الدولة الخاص بجمهورية السودان في عناوين النطاقات هو:", o: [{x:"sd", r:true}, {x:"eg", r:false}, {x:"sa", r:false}, {x:"us", r:false}], e: "رمز السودان في نطاقات الإنترنت هو sd."},
+{type: "circle", t: "الاختصار الذي يشير إلى الهيئات التجارية التي تهدف للربح في نطاقات الإنترنت هو:", o: [{x:"com", r:true}, {x:"edu", r:false}, {x:"gov", r:false}, {x:"org", r:false}], e: "اختصار com يشير للهيئات التجارية الهادفة للربح."},
+{type: "circle", t: "جهاز حاسب آلي وظيفته تحويل العنوان الحرفي (اسم النطاق) إلى عنوانه الرقمي (IP) والعكس هو:", o: [{x:"مزود أسماء النطاق (DNS Server)", r:true}, {x:"خادم الويب (Web Server)", r:false}, {x:"الموجه (Router)", r:false}, {x:"المودم (Modem)", r:false}], e: "مزود أسماء النطاق DNS يحول العناوين الحرفية لرقمية والعكس."},
+{type: "circle", t: "رقم البوابة (Port Number) الافتراضي المخصص لخدمة تصفح الشبكة العنكبوتية (WWW / HTTP) هو:", o: [{x:"80", r:true}, {x:"25", r:false}, {x:"23", r:false}, {x:"21", r:false}], e: "رقم البوابة الافتراضي لخدمة WWW هو 80."},
+{type: "circle", t: "رقم البوابة (Port Number) الافتراضي المخصص لخدمة البريد الإلكتروني (SMTP) هو:", o: [{x:"25", r:true}, {x:"80", r:false}, {x:"21", r:false}, {x:"23", r:false}], e: "رقم بوابة خدمة SMTP هو 25."},
+{type: "circle", t: "يتكون المقبس (Socket) اللازم لإنشاء وصلة وحيدة على مستوى الإنترنت من:", o: [{x:"عنوان IP ورقم بوابة التطبيق معاً", r:true}, {x:"اسم المضيف واسم الدولة فقط", r:false}, {x:"رقم الموجه وعنوان النطاق الجذري", r:false}, {x:"بروتوكول TCP وبروتوكول FTP", r:false}], e: "المقبس Socket يتكون من عنوان IP ورقم البوابة معاً."},
+{type: "circle", t: "وسيلة تصفية على الإنترنت لحجب المواقع اللاأخلاقية وحماية شبكة المؤسسة تسمى:", o: [{x:"جدار النار (Firewall)", r:true}, {x:"الموصل الآمن", r:false}, {x:"المفهرس الآلي", r:false}, {x:"بروتوكول الحماية", r:false}], e: "جدار النار Firewall وسيلة لتصفية وحجب المواقع غير المرغوب بها."},
+{type: "circle", t: "كلمة مودم (Modem) مشتقة من كلمتي:", o: [{x:"MODulator و DEModulator", r:true}, {x:"Mobile و Domain", r:false}, {x:"Model و Demo", r:false}, {x:"Main و Domain", r:false}], e: "المودم مشتقة من المعدل (Modulator) وكاشف التعديل (DEModulator)."},
+{type: "circle", t: "أحد خطوط المكونات المخصصة المشهورة لنقل البيانات بسرعة 1.544 ميجابت في الثانية هو خط:", o: [{x:"T1", r:true}, {x:"ISDN", r:false}, {x:"ADSL", r:false}, {x:"Dial-up", r:false}], e: "خط T1 ينقل البيانات بسرعة 1.544 ميجابت في الثانية."},
+{type: "circle", t: "سرعة الدفق النازل (من الإنترنت إلى الجهاز) في تقنية ADSL تتراوح عادة بين:", o: [{x:"1.5 Mbps إلى 8 Mbps", r:true}, {x:"50 Kbps إلى 100 Kbps", r:false}, {x:"10 Mbps إلى 100 Mbps", r:false}, {x:"1 Kbps إلى 10 Kbps", r:false}], e: "سرعة الدفق النازل لـ ADSL تتراوح من 1.5 إلى 8 ميجابت/ثانية."},
+{type: "circle", t: "الجهاز الذي يربط شبكة القسم العام بشبكة مقدم الخدمة ويعمل كجدار ناري هو:", o: [{x:"الموجه (Router)", r:true}, {x:"المودم العادي", r:false}, {x:"المكرر", r:false}, {x:"المفهرس", r:false}], e: "الموجه Router يعمل كبوابة وجدار ناري لترشيح رزم المعلومات."},
+{type: "circle", t: "أدوات البحث التي تعتمد على طاقم بشري لتصنيف المواقع ضمن بنية هرمية موضوعية هي:", o: [{x:"أدلة البحث (Search Directories)", r:true}, {x:"محركات البحث (Search Engines)", r:false}, {x:"محركات البحث البينية (Meta Search)", r:false}, {x:"المستكشفات الآلية", r:false}], e: "أدلة البحث تعتمد على تصنيف بشري في بنية هرمية."},
+{type: "circle", t: "يتألف محرك البحث من ثلاثة أجزاء رئيسية هي:", o: [{x:"المستكشف، المفهرس، وبرنامج الباحث", r:true}, {x:"المودم، الموجه، والجسر", r:false}, {x:"المرسل، المستقبل، ورقم البوابة", r:false}, {x:"النطاق الجذري والنطاق الفرعي", r:false}], e: "يتألف محرك البحث من: المستكشف، المفهرس، والباحث."},
+{type: "circle", t: "للبحث عن عبارة مطابقة تماماً وبنفس الترتيب في محركات البحث نستخدم:", o: [{x:"علامة التنصيص (\" \")", r:true}, {x:"الرابط OR", r:false}, {x:"الرابط NOT", r:false}, {x:"علامة الاستفهام", r:false}], e: "علامة التنصيص تستخدم للبحث عن مطابقة تامة بنفس الترتيب."},
+
+// أسئلة إضافية لتغطية العدد الكامل 60 وأكثر
+{type: "circle", t: "البروتوكول المسؤول عن إدارة وتنظيم وتبادل رسائل البريد الإلكتروني هو:", o: [{x:"SMTP", r:true}, {x:"HTTP", r:false}, {x:"FTP", r:false}, {x:"Telnet", r:false}], e: "SMTP بروتوكول البريد الإلكتروني."},
+{type: "circle", t: "عقد الإجارة في المعاملات المالية يُعرف بأنه:", o: [{x:"عقد لازم على منفعة معينة مدة معلومة بثمن معلوم", r:true}, {x:"بيع موصوف في الذمة", r:false}, {x:"توثيق دين بعين", r:false}, {x:"تبرع مطلق", r:false}], e: "الإجارة عقد لازم على منفعة."},
+{type: "circle", t: "أي من البروتوكولات التالية يُعد بروتوكول نقل يعتمد على إنشاء وصلة وتجزئة الرسائل:", o: [{x:"TCP", r:true}, {x:"IP", r:false}, {x:"ICMP", r:false}, {x:"SNMP", r:false}], e: "TCP ينشئ وصلة ويوثق وصول الرزم."},
+{type: "circle", t: "جهاز يربط قطعتين من شبكة محلية تستخدم نفس البروتوكول يسمى:", o: [{x:"الجسر (Bridge)", r:true}, {x:"الموجه", r:false}, {x:"البوابة", r:false}, {x:"المودم", r:false}], e: "الجسر Bridge يربط قطعتين من شبكة محلية."},
+{type: "circle", t: "ماكينة البحث الأولى التي استخدمت للبحث عن الملفات عام 1990 هي:", o: [{x:"Archie", r:true}, {x:"Google", r:false}, {x:"Yahoo", r:false}, {x:"AltaVista", r:false}], e: "Archie هي أول ماكينة بحث عام 1990."},
+
+// أسئلة الصح والخطأ للأكواد والتقنيات والمقرر
+{type: "circle", t: "الاستعلام <code>\"Internet Search Engines\"</code> باستخدام علامة التنصيص يبحث عن الكلمات معاً وبنفس ترتيبها.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "علامة التنصيص تجبر محرك البحث على البحث عن العبارة كاملة وبنفس الترتيب."},
+{type: "circle", t: "الرابط المنطقي <code>NOT</code> أو علامة (-) يستخدم لاستثناء بعض كلمات البحث.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "علامة (-) أو NOT تستخدم لاستثناء كلمات محددة من نتائج البحث."},
+{type: "circle", t: "الاستعلام <code>Cache: www.yahoo.com sudan</code> يستخدم للبحث عن كلمة sudan ضمن محتوى موقع ياهوو.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "Cache تستخدم للبحث عن كلمة أو جملة ضمن محتوى موقع معين."},
+{type: "circle", t: "تعد الإنترنت أسرع وأفضل وسيلة لنقل وتبادل المعلومات لكونها ثنائية الاتجاه.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الإنترنت وسيلة ثنائية الاتجاه وسريعة لنقل وتبادل المعلومات."},
+{type: "circle", t: "شبكة الإنترانت تسمح بالولوج الكامل للإنترنت مع منع العكس تماماً باستخدام جدار النار.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الإنترانت تتيح الولوج للخارج وتمنع دخول غير المسجلين عبر جدار النار."},
+{type: "circle", t: "محركات البحث البينية (Meta Search Engines) تمتلك فهارس خاصة بها ومخزنة على خوادمها الخاصة.", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "محركات البحث البينية لا تمتلك فهارس خاصة بل ترسل الاستعلام لمحركات أخرى."},
+{type: "circle", t: "بروتوكول TCP يقوم بتجزئة الرسائل الكبيرة إلى رزم بيانات صغيرة عند الطرف المرسل.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "بروتوكول TCP يجزئ الرسائل إلى رزم Packets ويعيد تجميعها."},
+{type: "circle", t: "البروتوكولات غير الموجهة (Nonroutable Protocols) تستطيع توجيه البيانات بين شبكات مختلفة عبر مسارات متعددة.", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "البروتوكولات غير الموجهة لا تستطيع توجيه البيانات بين شبكات مختلفة."},
+{type: "circle", t: "بروتوكول Telnet يستخدم للدخول عن بعد على الشبكة للاستفادة من إمكانيات الأجهزة الأخرى.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "بروتوكول Telnet مخصص للدخول عن بعد Remote Login."},
+{type: "circle", t: "العنوان الحرفي للمواقع (Domain Names) يُكتب دائماً من اليمين إلى الشمال.", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "العناوين الحرفية تُكتب من الشمال إلى اليمين."},
+{type: "circle", t: "هيئة إسناد الأرقام للإنترنت (IANA) تعتبر إحدى الوحدات العاملة في مجلس عمارة الإنترنت (IAB).", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "IANA هي وحدة عاملة في مجلس عمارة الإنترنت IAB."},
+{type: "circle", t: "لا توجد جهة واحدة أو دولة تمتلك أو تتحكم في الإنترنت بشكل مباشر ومطلق.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الإنترنت شبكة لامركزية لا تملكها جهة واحدة."},
+{type: "circle", t: "تعتمد أدلة البحث على الفهرسة الآلية بالكامل باستخدام برامج المستكشفات العنكبوتية.", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "أدلة البحث تعتمد على تصنيف بشري وليست فهرسة آلية بحتة."},
+{type: "circle", t: "يعد الاتصال المؤقت عبر الطلب الهاتفي (Dial-up) مناسباً جداً للأفراد لقلة تكاليفه وسهولة استخدامه.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "الاتصال المؤقت بالطلب الهاتفي مناسب للأفراد لقلة التكلفة."},
+{type: "circle", t: "الخطوط المخصصة (Leased Lines) لا تحجز الخط طول الوقت وتعتبر مجانية غير مكلفة.", o: [{x:"خطأ", r:true}, {x:"صح", r:false}], e: "الخطوط المخصصة تحجز الخط طوال الوقت وتعتبر مكلفة."},
+{type: "circle", t: "شبكة القسم الخاص (الداخلية) في المؤسسة متاحة لمنسوبي الجهة فقط وتحتوي على قواعد البيانات الحساسة.", o: [{x:"صح", r:true}, {x:"خطأ", r:false}], e: "شبكة القسم الخاص داخلية ومتاحة لمنسوبي الجهة فقط."}
+];
+
+let qs=[], ans=[], flags=[], i=0, left=60*60, tm=null, done=false, reviewMistakesOnly=false;
+
+const sh = a => {
+    let arr = a.slice();
+    for(let k = arr.length - 1; k > 0; k--){
+        const j = Math.random() * (k + 1) | 0;
+        [arr[k], arr[j]] = [arr[j], arr[k]];
+    }
+    return arr;
+};
+
+function initExam(isReset = false) {
+    let savedSelected = localStorage.getItem("net_exam_selected_60");
+    if(!isReset && savedSelected) {
+        try { qs = JSON.parse(savedSelected); } catch(e) { qs = generateTestSet(); }
+    } else {
+        qs = generateTestSet();
+        localStorage.setItem("net_exam_selected_60", JSON.stringify(qs));
+    }
+}
+
+function generateTestSet() {
+    let matches = MASTER_BANK.filter(q => q.type === 'match');
+    let others = MASTER_BANK.filter(q => q.type === 'circle');
+    
+    let shuffledMatches = sh(matches);
+    let selectedMatches = shuffledMatches.slice(0, Math.min(2, shuffledMatches.length));
+    
+    let shuffledOthers = sh(others);
+    let selectedOthers = shuffledOthers.slice(0, 60 - selectedMatches.length);
+    
+    let combined = [...selectedMatches, ...selectedOthers];
+    let finalSet = sh(combined).map(q => {
+        if(q.type === 'circle'){
+            return { type: 'circle', t: q.t, o: q.o.length === 2 ? q.o : sh(q.o), e: q.e };
+        } else if(q.type === 'match'){
+            return { type: 'match', t: q.t, pairs: q.pairs, allTargets: sh(q.allTargets), e: q.e };
+        }
+    });
+    return finalSet;
+}
+
+function start(reset = false){
+    if(reset) {
+        localStorage.removeItem("net_exam_selected_60");
+        localStorage.removeItem("net_exam_ans_60");
+        localStorage.removeItem("net_exam_left_60");
+        localStorage.removeItem("net_exam_i_60");
+    }
+    initExam(reset);
+    ans = new Array(qs.length).fill(null).map(() => null);
+    flags = new Array(qs.length).fill(false);
+    i = 0; left = 60*60; done = false; reviewMistakesOnly = false;
+    clearInterval(tm);
+    tm = setInterval(() => {
+        if(--left <= 0) finish();
+        else { const e = $("tm"); if(e) e.textContent = fmt(); saveState(); }
+    }, 1000);
+    draw();
+}
+
+const fmt = () => String(left / 60 | 0).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
+
+function saveState(){
+    if(!done){
+        localStorage.setItem("net_exam_ans_60", JSON.stringify(ans));
+        localStorage.setItem("net_exam_left_60", left);
+        localStorage.setItem("net_exam_i_60", i);
+    }
+}
+
+function home(){
+    app.innerHTML = `<div class="c">
+        <div class="header-box">
+            <p style="margin:0 0 5px 0; font-weight:bold; color:var(--mu);">بسم الله الرحمن الرحيم</p>
+            <h2 style="margin:5px 0; font-size:1.15rem;">جامعة النيل الابيض • كلية علوم الحاسوب وتقانة المعلومات</h2>
+            <p style="margin:5px 0; font-weight:bold; color:var(--ac);">مادة تقنيات الإنترنت - الفصل الدراسي الثاني</p>
+            <p style="margin:5px 0; font-size:0.95rem; font-weight:bold; color:var(--ok);">امتحان تجريبي شامل لجميع المحاضرات الـ 12 (60 سؤالاً كاملاً)</p>
+            <p style="margin:5px 0; font-size:0.88rem;" class="mu">إعداد ودراسة المحاضرات كاملة</p>
         </div>
-    </div>
+        <h1>امتحان تقنيات الإنترنت — شامل</h1>
+        <p class="mu" style="text-align:center;">اختبار إلكتروني تفاعلي يغطي كافة المحاضرات والأكواد الاستعلامية</p>
+        <p style="margin-top:15px;">يحتوي هذا الاختبار على 60 سؤالاً دقيقاً (اختيار من متعدد، صح وخطأ، وقائمتي توصيل وأكواد الاستعلام)، مع تلوين أرقام الأسئلة بالأخضر والأحمر للحالة الجزئية، ومميزات مراجعة الأخطاء وعشوائية الأسئلة كلياً. المدة: 60 دقيقة.</p>
+        <button class="p" onclick="start(true)" style="width:100%; margin-top:10px;">ابدأ الامتحان الآن</button>
+        <div class="developer-credit">تم تصميم وبرمجة الموقع بواسطة الطالب المتميز: <b>محمود عبدالله آدم محمد</b></div>
+    </div>`;
+}
 
-    <div class="login-card" id="main-container">
-        <div class="card-header-3d">
-            <select class="lang-select-box" id="lang-select">
-                <option value="ar">العربية</option>
-            </select>
-            <div class="illustration-3d">
-                <i class="fa-solid fa-graduation-cap fa-2x" style="color: #f97316;"></i>
+function draw(){
+    if(done) return;
+    const q = qs[i];
+    let contentHtml = '';
+
+    if(q.type === 'circle'){
+        contentHtml = q.o.map((o, k) => `
+            <button class="o ${ans[i] === k ? 's' : ''}" onclick="pickCircle(${k})">${o.x}</button>
+        `).join("");
+    } else if(q.type === 'match'){
+        if(!ans[i]) ans[i] = {};
+        contentHtml = `<div class="match-container">` + q.pairs.map((p, idx) => `
+            <div class="match-row">
+                <div class="match-item">${p.item}</div>
+                <select class="match-select" onchange="pickMatch(${idx}, this.value)">
+                    ${q.allTargets.map(t => `<option value="${t}" ${ans[i][idx] === t ? 'selected' : ''}>${t}</option>`).join("")}
+                </select>
             </div>
+        `).join("") + `</div>`;
+    }
+
+    app.innerHTML = `
+        <div class="top"><span class="mu">السؤال ${i+1} من ${qs.length}</span><span class="t" id="tm">${fmt()}</span></div>
+        <div class="bar"><i style="width:${(i+1)/qs.length*100}%"></i></div>
+        <div class="c">
+            <button class="flag-btn ${flags[i] ? 'active' : ''}" onclick="toggleFlag()">${flags[i] ? '★ متميز للمراجعة' : '☆ تمييز السؤال للمراجعة'}</button>
+            <p style="font-size: 1.05rem; font-weight:bold;">${q.t}</p>
+            ${contentHtml}
         </div>
+        <div class="nav">
+            <button onclick="go(-1)" ${i === 0 ? 'disabled' : ''}>السابق</button>
+            ${i < qs.length - 1 ? `<button class="p" onclick="go(1)">التالي</button>` : `<button class="p" onclick="submitConfirm()">تسليم الامتحان</button>`}
+        </div>
+        <div class="dots">
+            ${qs.map((_, k) => {
+                let statusClass = '';
+                let state = getQuestionState(k);
+                if(state === 'full') statusClass = 'answered';
+                else if(state === 'partial') statusClass = 'partial';
+                return `<b class="${statusClass} ${k === i ? 'cur' : ''} ${flags[k] ? 'flagged' : ''}" onclick="i=${k};draw()">${k+1}</b>`;
+            }).join("")}
+        </div>
+        <div class="developer-credit">المبرمج: محمود عبدالله آدم محمد</div>`;
+}
 
-        <div class="card-body-content">
-            <h1 id="form-title">بوابة تقانة المعلومات</h1>
-            <p class="subtitle" id="form-subtitle">تسجيل الدخول بالرقم الجامعي.</p>
+function getQuestionState(k){
+    let a = ans[k];
+    if(a === null || a === undefined) return 'empty';
+    if(qs[k].type === 'circle'){
+        return (a !== -1) ? 'full' : 'empty';
+    } else if(qs[k].type === 'match'){
+        let keys = Object.keys(a);
+        let filledCount = keys.filter(idx => a[idx] && a[idx] !== "اختر الإجابة المناسبة...").length;
+        if(filledCount === 0) return 'empty';
+        if(filledCount === qs[k].pairs.length) return 'full';
+        return 'partial';
+    }
+    return 'empty';
+}
 
-            <div id="auth-form-container">
-                <div class="form-group signup-field hidden-view">
-                    <label>الاسم الكامل (رباعي)</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="fullname" placeholder="أدخل اسمك رباعياً بدقة" oninput="checkFullName(this.value)">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <span id="name-indicator-text" class="name-indicator" style="color: #94a3b8;">يرجى إدخال اسمك رباعياً (4 أسماء على الأقل)</span>
-                </div>
+function isAnswered(k){
+    return getQuestionState(k) === 'full';
+}
 
-                <div class="form-group">
-                    <label>الرقم الجامعي (ID)</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="studentid" placeholder="مثال: 24-11086250">
-                        <i class="fa-solid fa-id-card"></i>
-                    </div>
-                </div>
+function toggleFlag(){
+    flags[i] = !flags[i];
+    if(navigator.vibrate) navigator.vibrate(30);
+    draw();
+}
 
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="pass-input" placeholder="********">
-                        <i class="fa-solid fa-eye eye-icon" onclick="togglePasswordVisibility('pass-input', this)"></i>
-                    </div>
-                </div>
+function pickCircle(k){ 
+    ans[i] = k; 
+    if(navigator.vibrate) navigator.vibrate(40);
+    saveState(); 
+    draw(); 
+}
 
-                <!-- توضيح كلمة المرور الثابتة للطلاب -->
-                <div class="password-notice-box signup-field hidden-view" id="password-notice-info">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <div>كلمة المرور الافتتاحية الموحدة لجميع الطلاب عند التسجيل هي: <strong style="font-size: 0.95rem; color: #ea580c;">2025</strong></div>
-                </div>
+function pickMatch(pairIdx, val){
+    if(!ans[i]) ans[i] = {};
+    ans[i][pairIdx] = val;
+    if(navigator.vibrate) navigator.vibrate(30);
+    saveState();
+    draw();
+}
 
-                <div class="extras-row" id="login-extras">
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;"><input type="checkbox"> <span>تذكرني</span></label>
-                </div>
+function go(d){ 
+    i += d; 
+    draw(); 
+}
 
-                <button class="btn-submit" id="submit-btn" onclick="handleAuthAction()">تسجيل الدخول</button>
+function submitConfirm(){
+    let unans = 0;
+    qs.forEach((q, k) => { if(!isAnswered(k)) unans++; });
+    if(unans > 0){
+        if(!confirm(`تنبيه: لديك ${unans} سؤال لم تكتمل الإجابة عليها. هل أنت متأكد من رغبتك في تسليم الامتحان؟`)) return;
+    }
+    finish();
+}
 
-                <div class="switch-mode">
-                    <span id="switch-text">ليس لديك حساب؟</span> 
-                    <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
-                </div>
+function finish(mistakesOnly = false){
+    clearInterval(tm);
+    done = true;
+    reviewMistakesOnly = mistakesOnly;
+    localStorage.removeItem("net_exam_selected_60");
 
-                <div class="back-footer">
-                    <a onclick="navigateWithAnimation('index.html')">← العودة للصفحة الرئيسية</a>
-                </div>
+    let s = 0;
+    qs.forEach((q, k) => {
+        if(q.type === 'circle'){
+            if(ans[k] !== null && ans[k] !== -1 && q.o[ans[k]].r) s++;
+        } else if(q.type === 'match'){
+            if(ans[k]){
+                let correctAll = true;
+                q.pairs.forEach((p, idx) => {
+                    if(ans[k][idx] !== p.target) correctAll = false;
+                });
+                if(correctAll) s++;
+            }
+        }
+    });
+    const wrongCount = qs.length - s;
+    const p = Math.round(s / qs.length * 100);
+
+    let displayList = qs.map((q, k) => ({q, k}));
+    if(reviewMistakesOnly){
+        displayList = displayList.filter(({q, k}) => {
+            let isCorrect = false;
+            if(q.type === 'circle') isCorrect = (ans[k] !== null && ans[k] !== -1 && q.o[ans[k]].r);
+            else if(q.type === 'match') {
+                if(ans[k]){
+                    let ok = true;
+                    q.pairs.forEach((p, idx) => { if(ans[k][idx] !== p.target) ok = false; });
+                    isCorrect = ok;
+                }
+            }
+            return !isCorrect;
+        });
+    }
+
+    app.innerHTML = `
+        <div class="c">
+            <div class="big">${s} / ${qs.length}</div>
+            <p style="text-align:center; font-size:1.2rem;"><b>النتيجة: ${p}%</b> — ${p>=85?"ممتاز جداً! 🌟":p>=70?"جيد جداً! ✨":p>=50?"مقبول، راجع الأخطاء بعناية. 📚":"تحتاج لمراجعة المحاضرات بشكل أفضل. 💡"}</p>
+            
+            <div class="stats-box">
+                <div class="stat-item"><div class="mu">الإجابات الصحيحة</div><div class="stat-num" style="color:var(--ok);">${s}</div></div>
+                <div class="stat-item"><div class="mu">الإجابات الخاطئة</div><div class="stat-num" style="color:var(--no);">${wrongCount}</div></div>
+                <div class="stat-item"><div class="mu">النسبة المئوية</div><div class="stat-num">${p}%</div></div>
             </div>
-        </div>
-    </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBjaaE-C8LzunKLjlULujL--0c_Cd1fA94",
-            authDomain: "kosti-university-it.firebaseapp.com",
-            databaseURL: "https://kosti-university-it-default-rtdb.firebaseio.com",
-            projectId: "kosti-university-it",
-            storageBucket: "kosti-university-it.firebasestorage.app",
-            messagingSenderId: "364361272352",
-            appId: "1:364361272352:web:56953086b49cb2e0a6c045"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-
-        let isSignupMode = false;
-        let shouldReloadAfterModal = false;
-
-        function showLuxuryLoader(title, desc) {
-            const modal = document.getElementById('luxury-loader-modal');
-            document.getElementById('loader-spinner-elem').style.display = 'block';
-            document.getElementById('loader-icon-container').style.display = 'none';
-            document.getElementById('loader-action-btn').classList.add('hidden-element');
-            document.getElementById('loader-title-text').textContent = title;
-            document.getElementById('loader-desc-text').textContent = desc;
-            modal.classList.add('active');
-        }
-
-        function showLuxurySuccess(title, desc, reload = false) {
-            shouldReloadAfterModal = reload;
-            document.getElementById('loader-spinner-elem').style.display = 'none';
-            const iconContainer = document.getElementById('loader-icon-container');
-            const iconElem = document.getElementById('loader-icon-elem');
-            iconContainer.style.display = 'flex';
-            iconContainer.style.background = '#fff7ed';
-            iconContainer.style.color = '#10b981';
-            iconElem.className = "fa-solid fa-circle-check";
-            
-            document.getElementById('loader-title-text').textContent = title;
-            document.getElementById('loader-desc-text').textContent = desc;
-            document.getElementById('loader-action-btn').classList.remove('hidden-element');
-        }
-
-        function showLuxuryError(title, desc) {
-            shouldReloadAfterModal = false;
-            document.getElementById('loader-spinner-elem').style.display = 'none';
-            const iconContainer = document.getElementById('loader-icon-container');
-            const iconElem = document.getElementById('loader-icon-elem');
-            iconContainer.style.display = 'flex';
-            iconContainer.style.background = '#fef2f2';
-            iconContainer.style.color = '#dc2626';
-            iconElem.className = "fa-solid fa-circle-xmark";
-            
-            document.getElementById('loader-title-text').textContent = title;
-            document.getElementById('loader-desc-text').textContent = desc;
-            document.getElementById('loader-action-btn').classList.remove('hidden-element');
-        }
-
-        function closeLuxuryModal() {
-            document.getElementById('luxury-loader-modal').classList.remove('active');
-            if (shouldReloadAfterModal) {
-                location.reload();
+            <button class="p" onclick="start(true)" style="width:100%; margin-top:10px;">إعادة الامتحان بأسئلة جديدة وعشوائية 🔄</button>
+            <button onclick="finish(${!reviewMistakesOnly})" style="width:100%; margin-top:8px; border-color:var(--ac); color:var(--ac);">${reviewMistakesOnly ? 'عرض كافة الأسئلة والنتيجة' : 'مراجعة الأخطاء فقط (' + wrongCount + ')'}</button>
+            <button onclick="shareResult(${s}, ${qs.length}, ${p})" style="width:100%; margin-top:8px; background:#25d366; color:#fff; border:none; font-weight:bold;">مشاركة النتيجة 📱</button>
+            <button onclick="home()" style="width:100%; margin-top:8px;">العودة للرئيسية</button>
+        </div>` +
+        (reviewMistakesOnly && displayList.length === 0 ? `<div class="c" style="text-align:center; color:var(--ok);"><h3>ممتاز جداً! ليس لديك أي أخطاء لمراجعتها 🎉</h3></div>` : '') +
+        displayList.map(({q, k}) => {
+            let resHtml = '';
+            if(q.type === 'circle'){
+                resHtml = q.o.map((o, j) => `<div class="o ${o.r ? 'ok' : j == ans[k] ? 'no' : ''}" style="cursor:default"><span>${o.x}</span> ${o.r ? '✓' : j == ans[k] ? '✗' : ''}</div>`).join("");
+            } else if(q.type === 'match'){
+                resHtml = `<div class="match-container">` + q.pairs.map((p, idx) => {
+                    let userAns = ans[k] ? ans[k][idx] : "لم تُجب";
+                    let isRight = userAns === p.target;
+                    return `<div class="match-row" style="border-color:${isRight ? 'var(--ok)' : 'var(--no)'}">
+                        <div class="match-item">${p.item}</div>
+                        <div style="flex:1; color:${isRight ? 'var(--ok)' : 'var(--no)'}; font-weight:bold;">اخترت: ${userAns} ${isRight ? '✓' : '✗ (الصحيح: ' + p.target + ')'}</div>
+                    </div>`;
+                }).join("") + `</div>`;
             }
-        }
+            return `<div class="c">
+                <p><b>${k+1}. ${q.t}</b></p>
+                ${resHtml}
+                <div class="ex">${!isAnswered(k) ? 'لم تُجب على هذا السؤال بشكل كامل. ' : ''}${q.e}</div>
+            </div>`;
+        }).join("") +
+        `<div class="c">
+            <div class="developer-credit" style="margin-top:10px;">تصميم وتطوير: محمود عبدالله آدم محمد</div>
+        </div>`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
 
-        function navigateWithAnimation(url) {
-            showLuxuryLoader("جاري الانتقال...", "يرجى الانتظار بينما يتم تحويلك بسلاسة.");
-            setTimeout(() => {
-                window.location.href = url;
-            }, 700);
-        }
+function shareResult(score, total, percentage){
+    const text = `📊 نتيجة امتحان تقنيات الإنترنت (الشامل)\nالدرجة: ${score} من ${total} (${percentage}%)\nتصميم وبرمجة: محمود عبدالله آدم محمد`;
+    if(navigator.share){
+        navigator.share({title: 'نتيجة الامتحان', text: text}).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text);
+        alert('تم نسخ تفاصيل النتيجة بنجاح! يمكنك لصقها ومشاركتها في واتساب.');
+    }
+}
 
-        function togglePasswordVisibility(fieldId, iconElem) {
-            const field = document.getElementById(fieldId);
-            if (field.type === 'password') {
-                field.type = 'text';
-                iconElem.className = "fa-solid fa-eye-slash eye-icon";
-            } else {
-                field.type = 'password';
-                iconElem.className = "fa-solid fa-eye eye-icon";
-            }
-        }
-
-        function checkFullName(name) {
-            const nameIndicator = document.getElementById('name-indicator-text');
-            const parts = name.trim().split(/\s+/);
-            if (name.trim().length === 0) {
-                nameIndicator.textContent = "يرجى إدخال اسمك رباعياً (4 أسماء على الأقل)";
-                nameIndicator.style.color = "#94a3b8";
-            } else if (parts.length < 4) {
-                nameIndicator.textContent = `الاسم غير مكتمل (${parts.length}/4 أسماء مدخلة) ✗`;
-                nameIndicator.style.color = "#dc2626";
-            } else {
-                nameIndicator.textContent = "الاسم رباعي صحيح ✓";
-                nameIndicator.style.color = "#10b981";
-            }
-        }
-
-        function toggleMode() {
-            isSignupMode = !isSignupMode;
-            const signupFields = document.querySelectorAll('.signup-field');
-            const formTitle = document.getElementById('form-title');
-            const formSubtitle = document.getElementById('form-subtitle');
-            const submitBtn = document.getElementById('submit-btn');
-            const switchText = document.getElementById('switch-text');
-            const switchBtn = document.getElementById('switch-btn');
-            const loginExtras = document.getElementById('login-extras');
-
-            if (isSignupMode) {
-                signupFields.forEach(el => el.classList.remove('hidden-view'));
-                formTitle.textContent = "إنشاء حساب جامعي جديد";
-                formSubtitle.textContent = "قم بتعبئة بياناتك الرباعية للانضمام للمنصة.";
-                submitBtn.textContent = "إنشاء الحساب والتسجيل";
-                switchText.textContent = "لديك حساب بالفعل؟";
-                switchBtn.textContent = "تسجيل الدخول";
-                loginExtras.classList.add('hidden-view');
-            } else {
-                signupFields.forEach(el => el.classList.add('hidden-view'));
-                formTitle.textContent = "بوابة تقانة المعلومات";
-                formSubtitle.textContent = "تسجيل الدخول بالرقم الجامعي.";
-                submitBtn.textContent = "تسجيل الدخول";
-                switchText.textContent = "ليس لديك حساب؟";
-                switchBtn.textContent = "سجل الآن";
-                loginExtras.classList.remove('hidden-view');
-            }
-        }
-
-        async function handleAuthAction() {
-            const studentid = document.getElementById('studentid').value.trim();
-
-            if (!studentid) {
-                showLuxuryError("تنبيه هام", "الرجاء إدخال الرقم الجامعي!");
-                return;
-            }
-
-            if (isSignupMode) {
-                const fullname = document.getElementById('fullname').value.trim();
-
-                if (!fullname) {
-                    showLuxuryError("تنبيه هام", "الرجاء إدخال الاسم الكامل!");
-                    return;
-                }
-
-                const nameParts = fullname.split(/\s+/);
-                if (nameParts.length < 4) {
-                    showLuxuryError("خطأ في الاسم الكامل", "عذراً، يشترط النظام إدخال الاسم كاملاً (رباعياً) بدقة.");
-                    return;
-                }
-
-                showLuxuryLoader("جاري إنشاء الحساب...", "يتم حفظ بياناتك الجامعية في السحابة بأمان.");
-
-                try {
-                    const docRef = db.collection("users").doc(studentid);
-                    const docSnap = await docRef.get();
-
-                    if (docSnap.exists) {
-                        showLuxuryError("خطأ في التسجيل", "الرقم الجامعي مسجل مسبقاً في النظام!");
-                        return;
-                    }
-
-                    // كلمة السر الافتتاحية الموحدة للطلاب 2025
-                    await docRef.set({
-                        fullname: fullname,
-                        studentid: studentid,
-                        password: "2025",
-                        createdAt: new Date().toISOString()
-                    });
-
-                    localStorage.setItem('it_logged_user', fullname);
-                    localStorage.setItem('it_logged_id', studentid);
-
-                    showLuxurySuccess("مرحباً بك!", "تم إنشاء الحساب الجامعي وتسجيل الدخول بنجاح.");
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1200);
-
-                } catch (err) {
-                    showLuxuryError("خطأ في الاتصال", "فشل الاتصال بقاعدة البيانات: " + err.message);
-                }
-
-            } else {
-                // وضع تسجيل الدخول بالرقم الجامعي وكلمة المرور (2025 للطلاب)
-                const pass = document.getElementById('pass-input').value.trim();
-                if (!pass) {
-                    showLuxuryError("تنبيه هام", "الرجاء إدخال كلمة المرور!");
-                    return;
-                }
-
-                showLuxuryLoader("جاري التحقق...", "يتم مطابقة بياناتك مع قاعدة البيانات السحابية.");
-
-                try {
-                    let foundUser = null;
-
-                    if (studentid === "24-11086250") {
-                        const docSnap = await db.collection("users").doc("24-11086250").get();
-                        if (docSnap.exists) {
-                            foundUser = docSnap.data();
-                        } else {
-                            foundUser = { fullname: "محمود عبدالله ادم محمد", studentid: "24-11086250", password: pass };
-                        }
-                    } else {
-                        const docSnap = await db.collection("users").doc(studentid).get();
-                        if (docSnap.exists) {
-                            foundUser = docSnap.data();
-                        }
-                    }
-
-                    if (!foundUser) {
-                        showLuxuryError("عذراً", "الرقم الجامعي غير مسجل في النظام. يرجى إنشاء حساب جديد.");
-                        return;
-                    }
-
-                    let validPass = foundUser.password || "2025";
-                    if (studentid !== "24-11086250") {
-                        validPass = "2025";
-                    }
-
-                    if (pass !== validPass) {
-                        showLuxuryError("خطأ في كلمة المرور", "كلمة المرور غير صحيحة. كلمة المرور الافتتاحية للطلاب هي 2025.");
-                        return;
-                    }
-
-                    localStorage.setItem('it_logged_user', foundUser.fullname);
-                    localStorage.setItem('it_logged_id', foundUser.studentid);
-
-                    showLuxurySuccess("مرحباً بعودتك!", `تم تسجيل الدخول بنجاح، أهلاً بك يا ${foundUser.fullname}`);
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1200);
-
-                } catch (err) {
-                    showLuxuryError("خطأ في النظام", "تعذر التحقق من البيانات: " + err.message);
-                }
-            }
-        }
-    </script>
+const $=id=>document.getElementById(id), app=$("app");
+home();
+</script>
 </body>
 </html>
